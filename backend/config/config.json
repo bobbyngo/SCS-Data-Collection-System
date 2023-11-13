@@ -1,0 +1,8 @@
+{
+    "host": "localhost",
+    "user": "postgres",
+    "password": "postgres",
+    "database": "postgres-supervised-consumption",
+    "port": "5432",
+    "dialect": "postgres"
+}
