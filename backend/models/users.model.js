@@ -4,6 +4,12 @@ module.exports = (sequelize, Sequelize) => {
         username: {
             type: Sequelize.STRING,
         },
+        first_name: {
+            type: Sequelize.STRING,
+        },
+        last_name: {
+            type: Sequelize.STRING,
+        },
         email: {
             type: Sequelize.STRING,
         },
@@ -14,5 +20,8 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.STRING,
         },
     });
+    // Sync the tables in db, create if not exists or changed the schema
+    // Uncommented the sync for all models when first run to create table
+    //User.sync({ alter: true });
     return User;
 };

@@ -10,6 +10,8 @@ exports.signUp = async (req, res) => {
     try {
         const newUser = await User.create({
             username: req.body.username,
+            first_name: req.body.first_name,
+            last_name: req.body.last_name,
             email: req.body.email,
             // adding the salt with length 8
             password: bcrypt.hashSync(req.body.password, 8),
