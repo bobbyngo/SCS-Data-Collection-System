@@ -44,6 +44,9 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 db.supervised_users = require('../models/users.model.js')(sequelize, Sequelize);
+db.questions = require('../models/questions.model.js')(sequelize, Sequelize);
+db.answers = require('../models/answers.model.js')(sequelize, Sequelize);
+// Define the relationship among tables here
 
 module.exports = {
     pool,
