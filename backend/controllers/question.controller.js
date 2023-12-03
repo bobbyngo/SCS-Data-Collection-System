@@ -5,8 +5,9 @@ const Questions = db.questions;
 exports.createQuestion = async (req, res) => {
     try {
         await Questions.create({
+            session_id: req.body.session_id,
             question_description: req.body.question_description,
-            question_type: req.body.question_type,
+            question_type_id: req.body.question_type_id,
             is_mandatory: req.body.is_mandatory,
         }).then((data) => {
             res.send(data);

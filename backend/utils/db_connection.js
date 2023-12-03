@@ -17,35 +17,25 @@ const sequelize = new Sequelize(config.database, config.user, config.password, {
     define: {
         underscored: true,
     },
-    //   pool: {
-    //     max: config.pool.max,
-    //     min: config.pool.min,
-    //     acquire: config.pool.acquire,
-    //     idle: config.pool.idle
-    //   }
 });
-
-// Testing connections
-// (async () => {
-//     const client = await pool.connect();
-//     try {
-//         const { rows } = await client.query('Select * from users');
-//         const curr_user = rows;
-//         console.log(curr_user);
-//     } catch (err) {
-//         console.log(err);
-//     } finally {
-//         client.release();
-//     }
-// })();
 
 const db = {};
 
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
+
 db.supervised_users = require('../models/users.model.js')(sequelize, Sequelize);
 db.questions = require('../models/questions.model.js')(sequelize, Sequelize);
 db.answers = require('../models/answers.model.js')(sequelize, Sequelize);
+db.roles = require('../models/roles.model.js')(sequelize, Sequelize);
+db.logs = require('../models/logs.model.js')(sequelize, Sequelize);
+db.sc_sites = require('../models/sc_sites.model.js')(sequelize, Sequelize);
+db.question_type = require('../models/question_type.model.js')(
+    sequelize,
+    Sequelize
+);
+db.sessions = require('../models/sessions.model.js')(sequelize, Sequelize);
+
 // Define the relationship among tables here
 
 module.exports = {

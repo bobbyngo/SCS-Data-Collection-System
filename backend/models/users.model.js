@@ -1,8 +1,14 @@
 module.exports = (sequelize, Sequelize) => {
     // user id is taking care by sequelize so no need to define
-    const User = sequelize.define('supervised_users', {
+    const User = sequelize.define('scs_employees', {
         username: {
             type: Sequelize.STRING,
+        },
+        site_id: {
+            type: Sequelize.INTEGER,
+        },
+        role_id: {
+            type: Sequelize.INTEGER,
         },
         first_name: {
             type: Sequelize.STRING,
@@ -14,9 +20,6 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.STRING,
         },
         password: {
-            type: Sequelize.STRING,
-        },
-        role: {
             type: Sequelize.STRING,
         },
     });
