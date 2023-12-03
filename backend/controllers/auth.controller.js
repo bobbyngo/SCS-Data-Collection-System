@@ -9,12 +9,15 @@ const User = db.supervised_users;
 exports.signUp = async (req, res) => {
     try {
         const newUser = await User.create({
+            site_id: req.body.site_id,
             username: req.body.username,
+            first_name: req.body.first_name,
+            last_name: req.body.last_name,
             email: req.body.email,
             // adding the salt with length 8
             password: bcrypt.hashSync(req.body.password, 8),
-            // default to user role when create new user
-            role: roleEnum.User,
+            // default to user role when create new user which is the last index
+            role_id: roleEnum.length - 1,
         });
         if (newUser) {
             res.send({
