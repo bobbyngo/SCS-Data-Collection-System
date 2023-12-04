@@ -10,13 +10,33 @@ module.exports = function (app) {
         next();
     });
 
-    app.post('/api/question/add', verifyAuthToken, controller.createQuestion);
+    app.post(
+        '/api/survey/:sid/question/add',
+        verifyAuthToken,
+        controller.createQuestion
+    );
 
-    app.get('/api/question', verifyAuthToken, controller.findAllQuestions);
+    app.get(
+        '/api/survey/:sid/question/all',
+        verifyAuthToken,
+        controller.findAllQuestions
+    );
 
-    app.get('/api/question/:id', verifyAuthToken, controller.findQuestionById);
+    app.get(
+        '/api/survey/question/:id',
+        verifyAuthToken,
+        controller.findQuestionById
+    );
 
-    app.put('/api/question/:id', verifyAuthToken, controller.updateQuestion);
+    app.put(
+        '/api/survey/question/:id',
+        verifyAuthToken,
+        controller.updateQuestion
+    );
 
-    app.delete('/api/question/:id', verifyAuthToken, controller.deleteQuestion);
+    app.delete(
+        '/api/survey/question/:id',
+        verifyAuthToken,
+        controller.deleteQuestion
+    );
 };
