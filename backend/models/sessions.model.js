@@ -11,6 +11,9 @@ module.exports = (sequelize, Sequelize) => {
         user_id: {
             type: Sequelize.INTEGER,
         },
+        title: {
+            type: Sequelize.STRING,
+        },
     });
     //Sessions.sync({ alter: true });
     return Sessions;

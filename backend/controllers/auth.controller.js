@@ -74,6 +74,7 @@ function createSession(user, req, res) {
         expiresIn: 86400, // 24 hours
     });
     req.session.token = jwtToken;
+    req.session.user_id = user.id;
     return res.status(200).send({
         id: user.id,
         username: user.username,

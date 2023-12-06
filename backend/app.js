@@ -27,7 +27,9 @@ app.get('/', (req, res) => {
 
 // routes
 require('./routes/auth.routes')(app);
+require('./routes/sessions.route')(app);
 require('./routes/questions.routes')(app);
+require('./routes/answers.routes')(app);
 
 app.listen(port, () => {
     console.log(`App listening at http://localhost:${port}`);
