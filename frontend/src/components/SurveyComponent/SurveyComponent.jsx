@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import * as Survey from 'survey-react';
 import 'survey-react/survey.css';
 
-const SurveyComponent = ({ formId, onBack }) => {
+const SurveyComponent = ({ formId, onBack, isEditModeEnabled }) => {
   const surveyForms = {
     'form1': {
       title: "Client Survey",
@@ -59,7 +59,7 @@ const SurveyComponent = ({ formId, onBack }) => {
       ]
     },
     'form2': {
-      title: "Simple Survey",
+      title: "Sample Survey",
       pages: [
         {
           questions: [
@@ -92,7 +92,9 @@ const SurveyComponent = ({ formId, onBack }) => {
   const [editableSurveyJSON, setEditableSurveyJSON] = useState(surveyForms[formId] || {});
 
   const toggleEditMode = () => {
-    setIsEditMode(!isEditMode);
+    if (isEditModeEnabled) {
+      setIsEditMode(!isEditMode);
+    }
   };
 
   const handleSurveyJSONChange = (event) => {
@@ -111,24 +113,23 @@ const SurveyComponent = ({ formId, onBack }) => {
   return (
     <div>
       <button onClick={onBack}>Back</button>
+      {isEditModeEnabled && (
+        <button onClick={toggleEditMode}>
+          {isEditMode ? "Save" : "Enter Edit Mode"}
+        </button>
+      )}
 
       {isEditMode ? (
-        <>
-          <button onClick={toggleEditMode}>Exit Edit Mode</button>
-          <textarea
-            value={JSON.stringify(editableSurveyJSON, null, 2)}
-            onChange={handleSurveyJSONChange}
-            style={{ width: '100%', height: '300px', marginTop: '10px' }}
-          />
-        </>
+        <textarea
+          value={JSON.stringify(editableSurveyJSON, null, 2)}
+          onChange={handleSurveyJSONChange}
+          style={{ width: '100%', height: '300px', marginTop: '10px' }}
+        />
       ) : (
-        <>
-          <button onClick={toggleEditMode}>Enter Edit Mode</button>
-          <Survey.Survey
-            model={new Survey.Model(editableSurveyJSON)}
-            onComplete={onSurveyComplete}
-          />
-        </>
+        <Survey.Survey
+          model={new Survey.Model(editableSurveyJSON)}
+          onComplete={onSurveyComplete}
+        />
       )}
     </div>
   );
