@@ -11,31 +11,31 @@ module.exports = function (app) {
     });
 
     app.post(
-        '/api/survey/:sid/question/add',
+        '/api/session/:sid/question/add',
         verifyAuthToken,
         controller.createQuestion
     );
 
     app.get(
-        '/api/survey/:sid/question/all',
+        '/api/session/:sid/question/all',
         verifyAuthToken,
         controller.findAllQuestions
     );
 
     app.get(
-        '/api/survey/question/:id',
+        '/api/session/question/:id',
         verifyAuthToken,
         controller.findQuestionById
     );
 
     app.put(
-        '/api/survey/question/:id',
+        '/api/session/question/:id',
         verifyAuthToken,
         controller.updateQuestion
     );
 
     app.delete(
-        '/api/survey/question/:id',
+        '/api/session/question/:id',
         verifyAuthToken,
         controller.deleteQuestion
     );

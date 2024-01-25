@@ -12,7 +12,7 @@ exports.submitAnswers = async (req, res) => {
                 elem = {
                     session_id: session.session_id,
                     question_id: answers[i]['question_id'],
-                    supervised_user_id: req.session.user_id,
+                    supervised_user_id: req.session.user.user_id,
                     answer: answers[i]['answer'],
                     other: answers[i]['other'],
                 };

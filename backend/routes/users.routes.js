@@ -1,4 +1,5 @@
-const controller = require('../controllers/session.controller');
+const controller = require('../controllers/users.controller');
+const authMiddleware = require('../middleware/authorization');
 const verifyAuthToken = require('../middleware/signInCheck');
 
 module.exports = function (app) {
@@ -10,5 +11,9 @@ module.exports = function (app) {
         next();
     });
 
-    app.post('/api/session/create', verifyAuthToken, controller.createSession);
+    app.put(
+        '/api/user/:id/edit',
+        [verifyAuthToken, authMiddleware.isAdmin],
+        controller.updateUser
+    );
 };

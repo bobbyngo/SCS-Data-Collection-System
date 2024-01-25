@@ -11,6 +11,9 @@ module.exports = (sequelize, Sequelize) => {
         question_type_id: {
             type: Sequelize.INTEGER,
         },
+        user_created_id: {
+            type: Sequelize.INTEGER,
+        },
         question_description: {
             type: Sequelize.STRING,
         },
