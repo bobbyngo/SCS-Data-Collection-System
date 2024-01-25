@@ -1,28 +1,17 @@
 const { db, pool } = require('../utils/db_connection');
 const User = db.supervised_users;
 
-module.exports = checkExistedUsernameOrEmail = async (req, res, next) => {
+async function checkExistedUsernameOrEmail(req, res, next) {
     try {
         // Existed username check
-        let user = await User.findOne({
-            where: {
-                username: req.body.username,
-            },
-        });
-        if (user) {
+        if (checkExistedUsername(req)) {
             return res.status(400).send({
                 message: 'Username existed',
             });
         }
 
         // Existed email check
-        user = await User.findOne({
-            where: {
-                email: req.body.email,
-            },
-        });
-
-        if (user) {
+        if (checkExistedEmail(req)) {
             return res.status(400).send({
                 message: 'Email existed',
             });
@@ -33,4 +22,33 @@ module.exports = checkExistedUsernameOrEmail = async (req, res, next) => {
             message: error.message,
         });
     }
+}
+
+async function checkExistedUsername(req) {
+    // Existed username check
+    let user = await User.findOne({
+        where: {
+            username: req.body.username,
+        },
+    });
+    console.log(user);
+    return user;
+}
+
+async function checkExistedEmail(req) {
+    // Existed email check
+    let user = await User.findOne({
+        where: {
+            email: req.body.email,
+        },
+    });
+
+    return user;
+}
+
+const checkExisted = {
+    checkExistedUsernameOrEmail,
+    checkExistedUsername,
+    checkExistedEmail,
 };
+module.exports = checkExisted;

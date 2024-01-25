@@ -11,7 +11,7 @@ module.exports = function (app) {
     });
 
     app.post(
-        '/api/survey/:sid/answers/submit',
+        '/api/session/:sid/answers/submit',
         verifyAuthToken,
         controller.submitAnswers
     );

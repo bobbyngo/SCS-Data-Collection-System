@@ -1,5 +1,6 @@
 const controller = require('../controllers/auth.controller');
-const checkExistedUsernameOrEmail = require('../middleware/signUpCheck');
+const checkExisted = require('../middleware/signUpCheck');
+const authMiddleware = require('../middleware/authorization');
 const verifyAuthToken = require('../middleware/signInCheck');
 
 module.exports = function (app) {
@@ -13,7 +14,7 @@ module.exports = function (app) {
 
     app.post(
         '/api/auth/signup',
-        checkExistedUsernameOrEmail,
+        [authMiddleware.isAdmin, checkExisted.checkExistedUsernameOrEmail],
         controller.signUp
     );
 
