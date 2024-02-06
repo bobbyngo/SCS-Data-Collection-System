@@ -1,0 +1,101 @@
+CREATE SCHEMA hc_schema;
+
+
+CREATE TABLE roles (
+    role_id SERIAL PRIMARY KEY  NOT NULL,
+    role_name character varying(255),
+    description text
+);
+
+CREATE TABLE hc_staffs (
+    staff_id SERIAL PRIMARY KEY  NOT NULL,
+    username character varying(255) NOT NULL,
+    email character varying(255) NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    role_id integer NOT NULL,
+    created_date timestamp with time zone DEFAULT CURRENT_TIMESTAMP,
+    removed_date timestamp with time zone,
+    FOREIGN KEY (role_id) REFERENCES roles(role_id)
+);
+
+
+
+
+SET search_path TO hc_schema;
+
+-- Table for daily aggregates
+CREATE TABLE HC_METRICS (
+    site_id INT PRIMARY KEY,
+    Facility_Name VARCHAR(255),
+    Contact_Info VARCHAR(255),
+    Report_Start_Date DATE,
+    Report_End_Date DATE,
+    Total_Visits INT,
+    Total_Consumptions INT,
+    Unique_Clients INT,
+    New_Clients INT,
+    Cocaine INT,
+    Crack INT,
+    Methamphetamine INT,
+    Amphetamine INT,
+    Heroin INT,
+    Fentanyl INT,
+    Oxycontin_Oxycodone INT,
+    Morphine INT,
+    Hydromorphone_Dilaudid INT,
+    Unspecified_Opioid INT,
+    Speedball INT,
+    Other_Substances INT,
+    Unknown_Not_Specified INT,
+    NonFatal INT,
+    Fatal INT,
+    EMS_Services_Called INT,
+    Other_Medical_Emergencies INT,
+    Law_Enforcement_Calls INT,
+    Male INT,
+    Female INT,
+    Other_Gender INT,
+    Age_Under20 INT,
+    Age_20_29 INT,
+    Age_30_39 INT,
+    Age_40_49 INT,
+    Age_50_59 INT,
+    Age_60_+ INT,
+    Age_Unknown INT,
+    Referrals_Within_SCS INT,
+    Referrals_Onsite INT,
+    Referrals_Offsite INT
+);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
