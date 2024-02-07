@@ -1,0 +1,27 @@
+.form-selection {
+    width: 400px; /* Adjust width as needed */
+    margin: auto;
+    border: 1px solid #ccc;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    text-align: center;
+  }
+  
+  .form-list .form-entry {
+    margin: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .form-list .form-entry span {
+    flex-grow: 1;
+  }
+  
+  .form-list button {
+    margin-left: 5px;
+    padding: 5px 10px;
+  }
+  
+  
