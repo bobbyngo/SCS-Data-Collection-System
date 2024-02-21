@@ -1,6 +1,6 @@
 module.exports = (sequelize, Sequelize) => {
-    const Sessions = sequelize.define('sessions', {
-        session_id: {
+    const Forms = sequelize.define('forms', {
+        form_id: {
             type: Sequelize.INTEGER,
             autoIncrement: true,
             primaryKey: true,
@@ -11,10 +11,13 @@ module.exports = (sequelize, Sequelize) => {
         user_id: {
             type: Sequelize.INTEGER,
         },
-        title: {
+        form_name: {
             type: Sequelize.STRING,
         },
     });
-    //Sessions.sync({ alter: true });
-    return Sessions;
+
+    // Uncommented for first run
+    //Forms.sync({ force: true });
+
+    return Forms;
 };

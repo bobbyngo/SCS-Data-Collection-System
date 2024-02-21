@@ -14,11 +14,9 @@ exports.signUp = async (req, res) => {
             newUser = await User.create({
                 site_id: req.body.site_id,
                 username: req.body.username,
-                first_name: req.body.first_name,
-                last_name: req.body.last_name,
                 email: req.body.email,
                 // adding the salt with length 8
-                password: bcrypt.hashSync(req.body.password, 8),
+                password_hash: bcrypt.hashSync(req.body.password, 8),
                 role_id: req.body.role_id,
             });
         }
@@ -42,8 +40,8 @@ exports.signIn = async (req, res) => {
 
         // Authentication check
         const isValidPassword = bcrypt.compareSync(
-            req.body.password,
-            user.password
+            req.body.password_hash,
+            user.password_hash
         );
 
         // When username or password is invalid, return a general message for security

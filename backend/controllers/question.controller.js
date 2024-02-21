@@ -1,18 +1,19 @@
 const { db, pool } = require('../utils/db_connection');
 const Role = require('../config/roleEnum');
 const authMiddleware = require('../middleware/authorization');
-const Session = db.sessions;
+const Forms = db.forms;
 const Questions = db.questions;
 
 exports.createQuestion = async (req, res) => {
-    const session = await Session.findByPk(req.params.sid);
-    if (session !== null) {
+    const form = await Forms.findByPk(req.params.sid);
+    if (form !== null) {
         try {
             await Questions.create({
-                session_id: session.session_id,
-                question_description: req.body.question_description,
+                form_id: form.form_id,
+                question_text: req.body.question_text,
                 question_type_id: req.body.question_type_id,
-                is_mandatory: req.body.is_mandatory,
+                is_mandatoryhc: req.body.is_mandatoryhc,
+                is_required: req.body.is_required,
             }).then((data) => {
                 res.send(data);
             });
@@ -27,7 +28,7 @@ exports.createQuestion = async (req, res) => {
 exports.findAllQuestions = async (req, res) => {
     try {
         await Questions.findAll({
-            where: { session_id: parseInt(req.params.sid) },
+            where: { form_id: parseInt(req.params.sid) },
         }).then((data) => res.send(data));
     } catch (e) {
         res.status(500).send({ message: e.message });
@@ -88,7 +89,7 @@ exports.deleteQuestion = async (req, res) => {
 
     if (authMiddleware.isAdminToModify(userCreatedRoleId, currentUserRoleId)) {
         Questions.destroy({
-            where: { id: id },
+            where: { question_id: id },
         })
             .then((num) => {
                 if (num == 1) {

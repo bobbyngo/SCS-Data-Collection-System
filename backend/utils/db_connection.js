@@ -1,6 +1,7 @@
 const config = require('../config/config.json');
 const Pool = require('pg').Pool;
 const Sequelize = require('sequelize');
+const bcrypt = require('bcryptjs');
 
 const pool = new Pool({
     user: config.user,
@@ -34,9 +35,107 @@ db.question_type = require('../models/question_type.model.js')(
     sequelize,
     Sequelize
 );
-db.sessions = require('../models/sessions.model.js')(sequelize, Sequelize);
+db.forms = require('../models/forms.model.js')(sequelize, Sequelize);
 
-// Define the relationship among tables here
+// Populate the data
+async function populateForms() {
+    const forms = [
+        {
+            site_id: 1,
+            user_id: 1,
+            form_name: 'Client data collection form',
+        },
+        {
+            site_id: 1,
+            user_id: 2,
+            form_name: 'Metric form',
+        },
+        {
+            site_id: 2,
+            user_id: 2,
+            form_name: 'Form 3',
+        },
+    ];
+    await db.forms.bulkCreate(forms);
+}
+
+async function populateUser() {
+    const users = [
+        {
+            site_id: 1,
+            username: 'admin',
+            role_id: 0,
+            email: 'admin@gmail',
+            password_hash: bcrypt.hashSync('password', 8),
+        },
+        {
+            site_id: 1,
+            username: 'hcadmin',
+            role_id: 1,
+            email: 'hcadmin@gmail',
+            password_hash: bcrypt.hashSync('password', 8),
+        },
+        {
+            site_id: 1,
+            username: 'hcuser',
+            role_id: 2,
+            email: 'hcuser@gmail',
+            password_hash: bcrypt.hashSync('password', 8),
+        },
+        {
+            site_id: 1,
+            username: 'siteadmin',
+            role_id: 3,
+            email: 'siteadmin@gmail',
+            password_hash: bcrypt.hashSync('password', 8),
+        },
+        {
+            site_id: 1,
+            username: 'siteuser',
+            role_id: 4,
+            email: 'site@gmail',
+            password_hash: bcrypt.hashSync('password', 8),
+        },
+    ];
+    await db.supervised_users.bulkCreate(users);
+}
+async function populateQuestions() {
+    const questions = [
+        {
+            form_id: 1,
+            question_type_id: 1,
+            is_required: true,
+            is_mandatoryhc: true,
+            question_text: 'What subtance did you use?',
+        },
+        {
+            form_id: 1,
+            question_type_id: 1,
+            is_required: true,
+            is_mandatoryhc: true,
+            question_text: 'What is your age?',
+        },
+        {
+            form_id: 1,
+            question_type_id: 1,
+            is_required: true,
+            is_mandatoryhc: true,
+            question_text: 'What is your gender?',
+        },
+        {
+            form_id: 1,
+            question_type_id: 1,
+            is_required: true,
+            is_mandatoryhc: true,
+            question_text: 'What area do you live in?',
+        },
+    ];
+    await db.questions.bulkCreate(questions);
+}
+
+//populateForms();
+//populateUser();
+//populateQuestions();
 
 module.exports = {
     pool,
