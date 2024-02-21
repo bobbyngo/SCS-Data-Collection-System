@@ -38,19 +38,17 @@ exports.updateUser = async (req, res, next) => {
                     {
                         site_id: req.body.site_id,
                         username: req.body.username,
-                        first_name: req.body.first_name,
-                        last_name: req.body.last_name,
                         role_id: req.body.role_id,
                         email: req.body.email,
-                        password: bcrypt.hashSync(req.body.password, 8),
+                        password_hash: bcrypt.hashSync(req.body.password, 8),
                     },
                     {
-                        where: { id: targetUserId },
+                        where: { staff_id: targetUserId },
                     }
                 ).then((num) => {
                     if (num == 1) {
                         res.send({
-                            message: `User ${targetUserId} is updated successfully.`,
+                            message: `User ${username} is updated successfully.`,
                         });
                     }
                 });

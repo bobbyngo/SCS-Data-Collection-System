@@ -27,7 +27,7 @@ app.get('/', (req, res) => {
 
 // routes
 require('./routes/auth.routes')(app);
-require('./routes/sessions.route')(app);
+require('./routes/forms.route')(app);
 require('./routes/questions.routes')(app);
 require('./routes/answers.routes')(app);
 require('./routes/users.routes')(app);

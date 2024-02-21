@@ -4,14 +4,14 @@ const User = db.supervised_users;
 async function checkExistedUsernameOrEmail(req, res, next) {
     try {
         // Existed username check
-        if (checkExistedUsername(req)) {
+        if (await checkExistedUsername(req)) {
             return res.status(400).send({
                 message: 'Username existed',
             });
         }
 
         // Existed email check
-        if (checkExistedEmail(req)) {
+        if (await checkExistedEmail(req)) {
             return res.status(400).send({
                 message: 'Email existed',
             });
@@ -42,7 +42,7 @@ async function checkExistedEmail(req) {
             email: req.body.email,
         },
     });
-
+    console.log(user);
     return user;
 }
 

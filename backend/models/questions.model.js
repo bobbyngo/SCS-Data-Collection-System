@@ -5,7 +5,7 @@ module.exports = (sequelize, Sequelize) => {
             autoIncrement: true,
             primaryKey: true,
         },
-        session_id: {
+        form_id: {
             type: Sequelize.INTEGER,
         },
         question_type_id: {
@@ -14,14 +14,17 @@ module.exports = (sequelize, Sequelize) => {
         user_created_id: {
             type: Sequelize.INTEGER,
         },
-        question_description: {
+        question_text: {
             type: Sequelize.STRING,
         },
-        is_mandatory: {
+        is_required: {
+            type: Sequelize.BOOLEAN,
+        },
+        is_mandatoryhc: {
             type: Sequelize.BOOLEAN,
         },
     });
 
-    //Questions.sync({ alter: true });
+    Questions.sync({ alter: true });
     return Questions;
 };

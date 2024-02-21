@@ -1,4 +1,4 @@
-const controller = require('../controllers/session.controller');
+const controller = require('../controllers/form.controller');
 const verifyAuthToken = require('../middleware/signInCheck');
 
 module.exports = function (app) {
@@ -10,5 +10,7 @@ module.exports = function (app) {
         next();
     });
 
-    app.post('/api/session/create', verifyAuthToken, controller.createSession);
+    app.post('/api/form/create', verifyAuthToken, controller.createForm);
+
+    app.get('/api/form/all', verifyAuthToken, controller.getForms);
 };
