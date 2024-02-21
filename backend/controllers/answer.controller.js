@@ -1,4 +1,5 @@
 const { db, pool } = require('../utils/db_connection');
+const transporter = require('../utils/email_notification');
 const Form = db.forms;
 const Answers = db.answers;
 
@@ -57,6 +58,21 @@ exports.updateAnswer = async (req, res) => {
             }
         ).then((num) => {
             if (num == 1) {
+                // Send email notification
+                let mailOptions = {
+                    from: 'ngohuugiabao8980@gmail.com',
+                    to: ['ngohuugiabao8980@gmail.com'],
+                    subject: 'Answer Update Alert',
+                    text: `User ID ${currentUserId} updated the answer with the id ${id}`,
+                };
+                transporter.sendMail(mailOptions, function (error, info) {
+                    if (error) {
+                        console.log(error);
+                    } else {
+                        console.log('Email sent: ' + info.response);
+                    }
+                });
+
                 res.send({
                     message: 'Question is updated successfully.',
                 });
