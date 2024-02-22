@@ -3,20 +3,38 @@ const Role = require('../config/roleEnum');
 const authMiddleware = require('../middleware/authorization');
 const Forms = db.forms;
 const Questions = db.questions;
+const QuestionOptions = db.question_option;
 
 exports.createQuestion = async (req, res) => {
     const form = await Forms.findByPk(req.params.sid);
     if (form !== null) {
         try {
+            let returnData = {};
             await Questions.create({
                 form_id: form.form_id,
                 question_text: req.body.question_text,
                 question_type_id: req.body.question_type_id,
                 is_mandatoryhc: req.body.is_mandatoryhc,
                 is_required: req.body.is_required,
+                user_created_id: req.session.user.staff_id,
             }).then((data) => {
-                res.send(data);
+                returnData = data.dataValues;
             });
+            let reqQuestionOption = req.body.question_option;
+            if (reqQuestionOption) {
+                reqQuestionOption = reqQuestionOption.map((obj) => ({
+                    ...obj,
+                    question_id: returnData.question_id,
+                }));
+
+                returnData = {
+                    ...returnData,
+                    question_option: reqQuestionOption,
+                };
+
+                await QuestionOptions.bulkCreate(reqQuestionOption);
+                res.send(returnData);
+            }
         } catch (e) {
             res.status(500).send({ message: e.message });
         }

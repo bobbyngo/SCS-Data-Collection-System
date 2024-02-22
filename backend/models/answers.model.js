@@ -17,6 +17,9 @@ module.exports = (sequelize, Sequelize) => {
         answer_text: {
             type: Sequelize.STRING,
         },
+        question_option_id: {
+            type: Sequelize.INTEGER,
+        },
     });
     // Sync the tables in db, create if not exists or changed the schema
     // Uncommented the sync for all models when first run to create table

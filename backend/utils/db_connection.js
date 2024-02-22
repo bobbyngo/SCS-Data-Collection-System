@@ -35,6 +35,10 @@ db.question_type = require('../models/question_type.model.js')(
     sequelize,
     Sequelize
 );
+db.question_option = require('../models/question_options.model.js')(
+    sequelize,
+    Sequelize
+);
 db.forms = require('../models/forms.model.js')(sequelize, Sequelize);
 
 // Populate the data
@@ -107,6 +111,7 @@ async function populateQuestions() {
             is_required: true,
             is_mandatoryhc: true,
             question_text: 'What subtance did you use?',
+            user_created_id: 1,
         },
         {
             form_id: 1,
@@ -114,13 +119,17 @@ async function populateQuestions() {
             is_required: true,
             is_mandatoryhc: true,
             question_text: 'What is your age?',
+            user_created_id: 1,
         },
         {
+            // form_id is auto generated in the API
             form_id: 1,
             question_type_id: 1,
             is_required: true,
             is_mandatoryhc: true,
             question_text: 'What is your gender?',
+            // user_created_id is auto generated in the API
+            user_created_id: 1,
         },
         {
             form_id: 1,
@@ -128,9 +137,32 @@ async function populateQuestions() {
             is_required: true,
             is_mandatoryhc: true,
             question_text: 'What area do you live in?',
+            user_created_id: 1,
+        },
+    ];
+
+    const optionQuestion = [
+        {
+            // question id is auto generated in the API
+            question_id: 1,
+            determined_answer: 'Crack',
+        },
+        {
+            question_id: 1,
+            determined_answer: 'Cocaine',
+        },
+        {
+            // question id is auto generated in the API
+            question_id: 3,
+            determined_answer: 'Male',
+        },
+        {
+            question_id: 3,
+            determined_answer: 'Female',
         },
     ];
     await db.questions.bulkCreate(questions);
+    await db.question_option.bulkCreate(optionQuestion);
 }
 
 //populateForms();
