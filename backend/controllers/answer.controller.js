@@ -15,6 +15,7 @@ exports.submitAnswers = async (req, res) => {
                     question_id: answers[i]['question_id'],
                     supervised_user_id: req.session.user.staff_id,
                     answer_text: answers[i]['answer_text'],
+                    question_option_id: answers[i]['question_option_id'],
                 };
                 data.push(elem);
             }
