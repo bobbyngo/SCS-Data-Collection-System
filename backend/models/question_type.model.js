@@ -9,6 +9,7 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.STRING,
         },
     });
-    //Question_Type.sync({ alter: true });
+    Question_Type.sync({ alter: true });
+
     return Question_Type;
 };

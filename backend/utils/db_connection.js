@@ -41,6 +41,16 @@ db.question_option = require('../models/question_options.model.js')(
 );
 db.forms = require('../models/forms.model.js')(sequelize, Sequelize);
 
+db.questions.hasMany(db.question_option, {
+    foreignKey: 'question_id',
+    as: 'question_option',
+});
+
+db.question_option.belongsTo(db.questions, {
+    foreignKey: 'question_id',
+    as: 'question',
+});
+
 // Populate the data
 async function populateForms() {
     const forms = [

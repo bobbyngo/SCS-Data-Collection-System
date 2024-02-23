@@ -24,7 +24,6 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.BOOLEAN,
         },
     });
-
     Questions.sync({ alter: true });
     return Questions;
 };
