@@ -45,21 +45,34 @@ exports.createQuestion = async (req, res) => {
 
 exports.findAllQuestions = async (req, res) => {
     try {
-        await Questions.findAll({
+        let questions = await Questions.findAll({
+            include: [
+                {
+                    model: QuestionOptions,
+                    as: 'question_option',
+                },
+            ],
             where: { form_id: parseInt(req.params.sid) },
-        }).then((data) => res.send(data));
+        });
+        res.status(200).send(questions);
     } catch (e) {
         res.status(500).send({ message: e.message });
     }
 };
 
 exports.findQuestionById = async (req, res) => {
-    console.log(req.body);
     try {
         const id = req.params.id;
-        Questions.findByPk(id).then((data) => {
-            res.send(data);
+        let question = await Questions.findOne({
+            include: [
+                {
+                    model: QuestionOptions,
+                    as: 'question_option',
+                },
+            ],
+            where: { question_id: id },
         });
+        res.status(200).send(question);
     } catch (e) {
         res.status(500).send({ message: e.message });
     }
