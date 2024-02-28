@@ -10,7 +10,7 @@ import './App.css';
 
 function App() {
 	return (
-		<div className='body'>
+		<div>
 			{/* <NavBar /> */}
 			<BrowserRouter>
 				<Routes path='/' element={<Login />}>
@@ -23,6 +23,7 @@ function App() {
 					<Route path='ReferralForm' element={<ReferralForm />} />
 				</Routes>
 			</BrowserRouter>
+			<div id='footer'>&copy; COPYRIGHT 2024 SCS GROUP PROJECT, INC </div> 
 		</div>
 	);
 }
