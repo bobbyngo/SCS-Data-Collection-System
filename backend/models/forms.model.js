@@ -14,7 +14,12 @@ module.exports = (sequelize, Sequelize) => {
         form_name: {
             type: Sequelize.STRING,
         },
+        is_published: {
+            type: Sequelize.BOOLEAN,
+            defaultValue: false,
+        },
     });
+    
 
     // Uncommented for first run
     //Forms.sync({ force: true });

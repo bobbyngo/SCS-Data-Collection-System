@@ -13,4 +13,7 @@ module.exports = function (app) {
     app.post('/api/form/create', verifyAuthToken, controller.createForm);
 
     app.get('/api/form/all', verifyAuthToken, controller.getForms);
+
+      // New route for publishing a form
+      app.patch('/api/form/:id/publish', verifyAuthToken, controller.publishForm);
 };
