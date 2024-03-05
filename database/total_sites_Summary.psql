@@ -1,4 +1,4 @@
-CREATE OR REPLACE VIEW site_schema.total_sites_Summary AS
+CREATE MATERIALIZED VIEW site_schema.total_sites_summary_materialized AS
 SELECT
     s.site_id,
     s.site_name,
@@ -103,6 +103,12 @@ ORDER BY
     report_year,
     s.site_id;
 
+
+CREATE OR REPLACE VIEW site_schema.HC_total_sites_summary AS
+SELECT
+    *
+FROM
+    site_schema.total_sites_summary_materialized;
 
 
 CREATE INDEX idx_date ON site_schema.submissions(created_date);
