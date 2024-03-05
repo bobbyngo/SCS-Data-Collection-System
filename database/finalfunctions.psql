@@ -1,0 +1,166 @@
+--execute a CREATE VIEW statement dynamically for each new site.
+CREATE OR REPLACE FUNCTION site_schema.create_site_view(site_id_arg INTEGER)
+RETURNS VOID AS $$
+DECLARE
+    view_name TEXT;
+    view_ddl TEXT;
+BEGIN
+    -- Construct the view name dynamically
+    view_name := 'site_' || site_id_arg || '_dashboard_data';
+
+    -- Construct the view definition dynamically
+    view_ddl := FORMAT($f$
+        CREATE OR REPLACE VIEW site_schema.%I AS
+        SELECT
+            EXTRACT(DOW FROM sub.created_date) AS weekday,
+            EXTRACT(MONTH FROM sub.created_date) AS month,
+            EXTRACT(YEAR FROM sub.created_date) AS year,
+            f.form_name,
+            COUNT(sub.submission_id) AS submission_count,
+            COUNT(ans.answer_id) AS answer_count
+        FROM
+            site_schema.submissions sub
+        JOIN
+            site_schema.forms f ON sub.form_id = f.form_id
+        JOIN
+            site_schema.answers ans ON sub.submission_id = ans.submission_id
+        WHERE
+            sub.site_id = %s
+        GROUP BY
+            weekday, month, year, f.form_name
+        ORDER BY
+            year, month, weekday, f.form_name;
+    $f$, view_name, site_id_arg);
+
+    -- Execute the view creation dynamically
+    EXECUTE view_ddl;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+
+
+CREATE OR REPLACE FUNCTION site_schema.generate_staff_for_sites()
+RETURNS VOID AS $$
+DECLARE
+    site_ids INTEGER[];
+    role_ids INTEGER[] := '{1, 2, 4, 5}'; -- Role IDs for Site Admin, Data Collector, HC Admin, and HC Viewer
+    admin_role_id INTEGER := 1; -- Site Admin role ID
+    data_collector_role_id INTEGER := 2; -- Data Collector role ID
+    hc_admin_role_id INTEGER := 4; -- HC Admin role ID
+    hc_viewer_role_id INTEGER := 5; -- HC Viewer role ID
+    admin_count INTEGER := 0; -- Counter for Site Admins
+    data_collector_count INTEGER := 0; -- Counter for Data Collectors
+    i INTEGER;
+    j INTEGER;
+    username TEXT;
+    first_names TEXT[] := ARRAY['John', 'Jane', 'Michael', 'Emily', 'David', 'Sarah'];
+    last_names TEXT[] := ARRAY['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Garcia'];
+    passwords TEXT[] := ARRAY['password123', 'admin@123', 'securepwd', 'letmein', 'changeme', 'P@ssw0rd'];
+    email_domain TEXT := '@example.com';
+BEGIN
+    SELECT ARRAY(SELECT site_id FROM site_schema.sc_sites) INTO site_ids;
+
+    IF site_ids IS NOT NULL THEN
+        FOR i IN 1..array_length(site_ids, 1) LOOP
+            -- Generate Site Admin
+            IF admin_count < 1 THEN
+                admin_count := admin_count + 1;
+                username := first_names[(random() * (array_length(first_names, 1) - 1) + 1)::INTEGER] || '_' || last_names[(random() * (array_length(last_names, 1) - 1) + 1)::INTEGER] || '_role' || admin_role_id || '_' || substring(md5(random()::text), 1, 8);
+                INSERT INTO site_schema.staffs (username, email, password_hash, role_id, site_id)
+                VALUES
+                    (username, 
+                    username || email_domain,
+                    md5(passwords[(random() * (array_length(passwords, 1) - 1) + 1)::INTEGER] || (random() * 1000)::TEXT), 
+                    admin_role_id, 
+                    site_ids[i]);
+            END IF;
+ 			-- Generate Data Collectors 
+            FOR j IN 1..2 LOOP --two staff per site
+                username := first_names[(random() * (array_length(first_names, 1) - 1) + 1)::INTEGER] || '_' || last_names[(random() * (array_length(last_names, 1) - 1) + 1)::INTEGER] || '_role' || data_collector_role_id || '_' || substring(md5(random()::text), 1, 8);
+                INSERT INTO site_schema.staffs (username, email, password_hash, role_id, site_id) VALUES
+                    (username, 
+                    username || email_domain,
+                    md5(passwords[(random() * (array_length(passwords, 1) - 1) + 1)::INTEGER] || (random() * 1000)::TEXT), 
+                    data_collector_role_id, 
+                    site_ids[i]);
+            END LOOP;
+			-- Generate HC Admin and HC Viewer for each site
+            username := first_names[(random() * (array_length(first_names, 1) - 1) + 1)::INTEGER] || '_' || last_names[(random() * (array_length(last_names, 1) - 1) + 1)::INTEGER] || '_role' || hc_admin_role_id || '_' || substring(md5(random()::text), 1, 8);
+            INSERT INTO site_schema.staffs (username, email, password_hash, role_id, site_id) VALUES
+                (username, 
+                username || email_domain,
+                md5(passwords[(random() * (array_length(passwords, 1) - 1) + 1)::INTEGER] || (random() * 1000)::TEXT), 
+                hc_admin_role_id, 
+                site_ids[i]);
+
+            username := first_names[(random() * (array_length(first_names, 1) - 1) + 1)::INTEGER] || '_' || last_names[(random() * (array_length(last_names, 1) - 1) + 1)::INTEGER] || '_role' || hc_viewer_role_id || '_' || substring(md5(random()::text), 1, 8);
+            INSERT INTO site_schema.staffs (username, email, password_hash, role_id, site_id) VALUES
+                (username, 
+                username || email_domain,
+                md5(passwords[(random() * (array_length(passwords, 1) - 1) + 1)::INTEGER] || (random() * 1000)::TEXT), 
+                hc_viewer_role_id, 
+                site_ids[i]);
+           
+    
+        END LOOP;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+SELECT site_schema.generate_staff_for_sites();
+
+
+
+
+Generate 
+CREATE OR REPLACE FUNCTION site_schema.generate_staff_email_password(
+    role_id_input INTEGER,
+    site_id_input INTEGER DEFAULT NULL
+)
+RETURNS VOID AS $$
+DECLARE
+    staff_record RECORD;
+    new_email TEXT;
+    new_password TEXT;
+    email_domain TEXT := '@example.com';
+    password_characters TEXT := 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    password_length INT := 5; -- You can adjust the length of the password
+BEGIN
+    FOR staff_record IN
+        SELECT s.*, r.role_name
+        FROM site_schema.staffs s
+        JOIN site_schema.roles r ON s.role_id = r.role_id
+        WHERE (s.site_id = site_id_input OR site_id_input IS NULL)
+          AND s.role_id = role_id_input
+    LOOP
+        -- Generate new email incorporating the role
+        new_email := 'staff_' || staff_record.role_name || '_' || staff_record.staff_id || email_domain;
+
+        -- Generate new password
+        new_password := '';
+        FOR i IN 1..password_length LOOP
+            new_password := new_password || substr(password_characters, (random() * (length(password_characters) - 1) + 1)::INTEGER, 1);
+        END LOOP;
+        new_password := md5(new_password); -- Hash the password, consider using a more secure hashing mechanism
+
+        -- Update staff record with new email and password hash
+        UPDATE site_schema.staffs
+        SET email = new_email, password_hash = new_password
+        WHERE staff_id = staff_record.staff_id;
+    END LOOP;
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- Step 1: Create a temporary sequence
+CREATE TEMP SEQUENCE temp_seq START 1;
+
+-- Step 2: Update the table using the sequence
+UPDATE site_schema.staffs
+SET site_id = nextval('temp_seq')
+WHERE role_id = 1; -- This condition ensures only rows with site_id 1 and above are updated
+
+-- Step 3: Drop the temporary sequence
+DROP SEQUENCE temp_seq;

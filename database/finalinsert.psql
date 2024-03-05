@@ -1,0 +1,163 @@
+-- Set the search path to your schema
+SET search_path TO site_schema;
+
+-- Insert roles
+INSERT INTO roles (role_id, role_name, description) VALUES
+(1, 'Site Admin', 'Responsible for managing the site and overseeing operations.'),
+(2, 'Data Collector', 'Responsible for collecting client data and managing form submissions.'),
+(3, 'Administrator', 'Responsible for managing the database'),
+(4, 'HC Admin', 'Responsible for managing forms'),
+(5, 'HC Viewer', 'Can View PowerBI Dashboards with Aggregated views ');
+
+-- Insert sites
+INSERT INTO sc_sites (site_id, site_name, address_line1, address_line2, postal_code, city, province, site_type) VALUES
+    (1, 'Downtown Health Center', '123 Main St', 'Suite 100', 'A1B 2C3', 'Metropolis', 'ON', 'Fixed'),
+    (2, 'Uptown Clinic', '456 Elm St', NULL, 'D4E 5F6', 'Gotham', 'BC', 'Mobile'),
+    (3, 'Greenfield Medical Center', '789 Oak St', 'Suite 200', 'G1H 3J5', 'Greenfield', 'QC', 'Fixed'),
+    (4, 'Valleyview Community Clinic', '1010 Maple Ave', 'Unit 50', 'V2X 9E9', 'Valleyview', 'BC', 'Fixed'),
+    (5, 'Sunset Wellness Hub', '456 Sunset Blvd', NULL, 'S4P 3Y2', 'Sunset City', 'SK', 'Fixed'),
+
+    (6, 'Rosewood Mobile Health Unit', '123 Rose St', NULL, 'R7M 5P1', 'Rosewood', 'MB', 'Mobile'),
+    (7, 'Lakeview Clinic', '789 Lakeview Rd', NULL, 'L5M 8K7', 'Lakeview', 'AB', 'Mobile'),
+    (8, 'Harborfront Health Center', '321 Harbor St', NULL, 'H8E 7A4', 'Harborfront', 'NB', 'Mobile'),
+
+    (9, 'Pinecrest Healthcare Center', '555 Pine St', 'Floor 3', 'P9N 2T8', 'Pinecrest', 'ON', 'Fixed'),
+    (10, 'Mountainside Medical Facility', '987 Mountain Ave', 'Suite 100', 'M3T 6Z1', 'Mountain City', 'BC', 'Fixed'),
+    (11, 'Riverdale Community Clinic', '456 River Rd', 'Building B', 'R5R 2C3', 'Riverdale', 'NL', 'Fixed'),
+    (12, 'Highland Medical Services', '111 Highland Ave', NULL, 'H2O 4P7', 'Highland', 'PE', 'Fixed'),
+    (10, 'Maplewood Wellness Hub', '789 Maple St', NULL, 'M9M 5L2', 'Maplewood', 'YT', 'Fixed'),
+    (14, 'Brookside Clinic', '222 Brookside Dr', NULL, 'B3B 1X1', 'Brookside', 'NT', 'Fixed'),
+    (15, 'Parkview Medical Center', '123 Park Ave', 'Suite 300', 'P8N 3R6', 'Parkville', 'NU', 'Fixed'),
+    (16, 'Riverside Health Center', '456 Riverside Rd', NULL, 'R4R 7S5', 'Riverside', 'NS', 'Fixed'),
+    (16, 'Midtown Wellness Hub', '789 Midtown Blvd', NULL, 'M6M 4K9', 'Midtown', 'QC', 'Fixed'),
+    (18, 'Central Valley Community Clinic', '101 Central Ave', 'Unit 20', 'C2C 8T1', 'Central Valley', 'SK', 'Fixed'),
+    (19, 'Sunrise Medical Services', '555 Sunrise St', NULL, 'S6S 3L8', 'Sunrise City', 'NB', 'Fixed'),
+    (20, 'Seaside Health Center', '123 Seaside Rd', NULL, 'S1S 2P5', 'Seaside', 'NL', 'Fixed');
+
+
+
+-- Insert forms
+INSERT INTO forms (form_id, form_name, description, site_id) VALUES
+(1, 'Client Intake', 'Form used for new or returning clients to intake their basic information and substance use details.', NULL),
+(2, 'Incident Report', 'Form used to report incidents that occur within the facility, including overdoses and other emergencies.', NULL),
+(3, 'Referral', 'Form used to document referrals to internal and external services provided to the clients.', NULL),
+(4, 'Feedback Survey', 'A form to collect feedback from clients based on the service provided.', 1);
+
+INSERT INTO site_schema.question_types (question_type_id, type_name) VALUES
+(1, 'Text'),
+(2, 'Date'),
+(3,'Dropdown'),
+(4,'Radio Button'),
+(5,'Checkbox'),
+(6,'Boolean'),
+(7,'Scale');
+
+-- Insert questions for the Client Intake Form
+INSERT INTO site_schema.questions (question_id, form_id, question_text, question_type_id, is_mandatory)
+VALUES
+    -- Client Intake Form questions
+    (1, 1, 'What is your full name?', 1, TRUE),
+    (2, 1, 'What is your date of birth?', 2, TRUE),
+    (3, 1, 'What is your gender?', 3, TRUE),
+    (4, 1, 'Is this your first visit to our facility?', 6, TRUE),
+    (5, 1, 'How many times have you visited this facility in the past month?', 4, FALSE),
+    (6, 1, 'What substances are you consuming for today’s visit?', 5, TRUE),
+    (7, 1, 'Do you require any assistance or kits for today’s visit?', 6, TRUE),
+    (8, 1, 'How safe do you feel when visiting our site?', 7, TRUE),
+
+    -- Incident Report Form questions
+    (9,  2, 'Date and time of the incident:', 2, TRUE),
+    (10, 2, 'Type of incident:', 3, TRUE),
+    (11, 2, 'Was naloxone administered?', 6, TRUE),
+    (12, 2, 'Were EMS services called?', 6, TRUE),
+    (13, 2, 'Were any drugs consumed immediately before the incident?', 4, FALSE, TRUE)
+    (14, 2, 'What drugs were consumed ?', 5, FALSE, TRUE)
+    (15, 2, 'Brief description of the incident:', 1, FALSE),
+
+    -- Referral Form questions
+    (16, 3, 'Client Name:', 1, TRUE),
+    (17, 3, 'Date of referral:', 2, TRUE),
+    (18, 3, 'What was the primary purpose of visit today? ', 5, TRUE),
+    (19, 3, 'Type of service referred to:', 3, TRUE),
+    (20, 3, 'Specific service or organization referred to:', 5, FALSE),
+    (21, 3, 'Reason for referral:', 1, TRUE),
+
+    -- Feedback Survey questions
+    (22, 4, 'On a scale, how satisfied are you with the services provided?',7, TRUE),
+    (23, 4, 'What services did you use during your visit?', 5, TRUE),
+    (24, 4, 'Do you have any suggestions for how we can improve our services?', 1, FALSE);
+
+
+
+
+INSERT INTO site_schema.question_options (question_option_id, question_id, determined_answer) VALUES
+
+-- For "What is your gender?" question
+(1, 3, 'Male'),
+(2, 3, 'Female'),
+(3, 3, 'Other'),
+
+-- For "What is your substance of consumption use for today’s visit?" 
+(4, 6, 'Cocaine'),
+(5, 6, 'Crack'),
+(6, 6, 'Methamphetamine'),
+(7, 6, 'Amphetamine'),
+(8, 6, 'Heroin'),
+(9, 6, 'Fentanyl'),
+(10, 6, 'Oxycontin/oxycodone'),
+(11, 6, 'Morphine'),
+(12, 6, 'Hydromorphone/Dilaudid'),
+(13, 6, 'Unspecified opioid'),
+(14, 6, 'Speedball'),
+(15, 6, 'Other substances'),
+(16, 6, 'Unknown/not specified'),
+
+-- For "Type of incident:" question
+(17, 10, 'Non-fatal Overdose'),
+(18, 10, 'Fatal Overdose'),
+(19, 10, 'Other medical emergencies'),
+(20, 10, 'Law enforcement calls'),
+
+-- For "What drugs were consumed?" question
+(21, 14, 'Cocaine'),
+(22, 14, 'Crack'),
+(23, 14, 'Methamphetamine'),
+(24, 14, 'Amphetamine'),
+(25, 14, 'Heroin'),
+(26, 14, 'Fentanyl'),
+(27, 14, 'Oxycontin/oxycodone'),
+(28, 14, 'Morphine'),
+(29, 14, 'Hydromorphone/Dilaudid'),
+(30, 14, 'Unspecified opioid'),
+(31, 14, 'Speedball'),
+(32, 14, 'Other substances'),
+(33, 14, 'Unknown/not specified')
+
+(34, 18,'Supervised drug consumption'),
+(35, 18,'Access to wrap-around services'),
+(36, 18,'Referral services only'),
+(37, 18,'Other');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

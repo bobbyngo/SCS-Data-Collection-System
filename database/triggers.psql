@@ -1,0 +1,16 @@
+
+--This trigger can call a function that dynamically creates a new view for the newly added site.
+CREATE OR REPLACE FUNCTION site_schema.after_site_created_insert()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Call the function to create a view for the new site
+    PERFORM site_schema.create_site_view(NEW.site_id);
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_after_site_insert
+AFTER INSERT ON site_schema.sc_sites
+FOR EACH ROW
+EXECUTE FUNCTION site_schema.after_site_created_insert();
+
