@@ -1,22 +1,29 @@
-
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './AuthStyles.css'; // Ensure this path is correct for your project
 
 const Login = () => {
     const [credentials, setCredentials] = useState({ username: '', password: '' });
+
+    useEffect(() => {
+      // Set the title of the tab when the component mounts
+      document.title = "SCS Login";
+  }, []); 
   
     const handleChange = (event) => {
       const { name, value } = event.target;
       setCredentials({ ...credentials, [name]: value });
     };
-  
+
     const handleSubmit = async (event) => {
       event.preventDefault();
       // Implement your login logic here, possibly calling AuthService.login(credentials)
     };
-  
+
     return (
       <div className="auth-container">
+        <h1>Welcome to the Supervised Consumption Sites Web System</h1> {/* Title */}
+        <h2>Login</h2>
+        <br></br>
         <form onSubmit={handleSubmit} className="auth-form">
           <label htmlFor="username" className="label">Username:</label>
           <input
@@ -28,7 +35,7 @@ const Login = () => {
             onChange={handleChange}
             required
           />
-  
+
           <label htmlFor="password" className="label">Password:</label>
           <input
             type="password"
@@ -39,11 +46,11 @@ const Login = () => {
             onChange={handleChange}
             required
           />
-  
+
           <button type="submit" className="button">Log In</button>
         </form>
       </div>
     );
-  };
-  export default Login;
-  
+};
+
+export default Login;

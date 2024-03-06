@@ -239,3 +239,17 @@ p {
     margin-top: 10px;
     cursor: pointer;
   } */
+
+  .language-toggle {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 5px 10px;
+    background-color: #3e3e3e;
+    border: 1px solid #ccc;
+    cursor: pointer;
+  }
+  
+  .form-container {
+    position: relative;
+  }

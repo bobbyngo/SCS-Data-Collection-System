@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './form.css';
 
 function QuestionForm() {
@@ -9,6 +9,11 @@ function QuestionForm() {
   const handleFormNameChange = (e) => {
     setFormName(e.target.value);
   };
+
+  useEffect(() => {
+    // Set the title of the tab when the component mounts
+    document.title = "Create New Form";
+  }, []); 
 
   const handleQuestionChange = (index, field, value) => {
     const newQuestions = [...questions];

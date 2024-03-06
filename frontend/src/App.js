@@ -1,8 +1,5 @@
-
-
-
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-// import { NavBar } from './Component/NavBar';
+import NavBar from './Component/NavBar/NavBar.js';
 // import { QuestionForm } from './Component/QuestionForm';
 import { Login, NewPassword, PasswordReset, Registration} from './Pages/Authentication';
 import { ClientIntakeForm, IncidentReportForm, ReferralForm, QuestionForm, ClientForm } from './Pages/Forms';
@@ -14,7 +11,9 @@ function App() {
 		<div>
 			{/* <NavBar /> */}
 			<BrowserRouter>
-				<Routes path='/' element={<Login />}>
+				<NavBar/>
+				<Routes>
+					<Route path='/' element={<Login />}/>
 					<Route path='Login' element={<Login />} />
 					<Route path='PasswordReset' element={<PasswordReset />} />
 					<Route path='NewPassword' element={<NewPassword />} />

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './AuthStyles.css'; // Make sure this path is correct
 
 const PasswordReset = () => {
@@ -9,6 +9,11 @@ const PasswordReset = () => {
     // Implement the password reset logic here
     console.log(email); // For testing, to see if the email is captured
   };
+
+  useEffect(() => {
+    // Set the title of the tab when the component mounts
+    document.title = "Password Reset";
+  }, []); 
 
   return (
     <div className="auth-container"> {/* Ensure this class exists in your CSS */}

@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './form.css';
 import jsonData from './clientintakeform.json';
  
@@ -9,6 +9,11 @@ const CreateForm = () => {
     const [questions, setQuestions] = useState([]); // Array to hold new questions
     const [isPublished, setIsPublished] = useState(false);
   
+    useEffect(() => {
+      // Set the title of the tab when the component mounts
+      document.title = "Create New Form";
+    }, []); 
+
     const handleQuestionContentChange = (e) => {
       setNewQuestion({ ...newQuestion, content: e.target.value });
     };

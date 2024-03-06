@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './AuthStyles.css'; // Ensure this path is correct for your project
 
 const Registration = () => {
@@ -8,6 +8,12 @@ const Registration = () => {
     password: '',
     confirmPassword: '',
   });
+  
+  useEffect(() => {
+    // Set the title of the tab when the component mounts
+    document.title = "Register New User";
+  }, []); 
+  
   const [errorMessage, setErrorMessage] = useState('');
 
   const handleChange = (event) => {

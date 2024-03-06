@@ -1,10 +1,19 @@
 
 // src/App.js
 import React from 'react';
+import { useState, useEffect } from 'react';
 import jsonData from './incidentReport.json';
 import './form.css';
 
+
+
 const IncidentReportForm = () => {
+
+  useEffect(() => {
+    // Set the title of the tab when the component mounts
+    document.title = "Incident Report";
+  }, []); 
+  
   const renderElement = (element) => {
     switch (element.type) {
       case 'textField':

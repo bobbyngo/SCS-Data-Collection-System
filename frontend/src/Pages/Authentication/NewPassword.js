@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './AuthStyles.css'; // Ensure this path is correct for your project
 const NewPassword = () => {
   const [passwordData, setPasswordData] = useState({
@@ -7,6 +7,11 @@ const NewPassword = () => {
     newPassword: '',
     confirmPassword: '',
   });
+
+  useEffect(() => {
+    // Set the title of the tab when the component mounts
+    document.title = "Change Password";
+  }, []); 
 
   const [errorMessage, setErrorMessage] = useState('');
 
