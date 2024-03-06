@@ -109,6 +109,8 @@ BEGIN
         FROM
             site_schema.submissions sub
         JOIN
+            site_schema.sc_sites s ON sub.site_id = s.site_id
+        LEFT JOIN
             site_schema.answers ans ON sub.submission_id = ans.submission_id
         WHERE
             sub.site_id = %L
