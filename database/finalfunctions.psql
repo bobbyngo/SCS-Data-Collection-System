@@ -1,42 +1,128 @@
---execute a CREATE VIEW statement dynamically for each new site.
-CREATE OR REPLACE FUNCTION site_schema.create_site_view(site_id_arg INTEGER)
+CREATE OR REPLACE FUNCTION site_schema.create_site_view(site_id_arg INTEGER, site_name_arg TEXT)
 RETURNS VOID AS $$
 DECLARE
+    sanitized_site_name TEXT;
     view_name TEXT;
-    view_ddl TEXT;
+    dynamic_sql TEXT;
 BEGIN
-    -- Construct the view name dynamically
-    view_name := 'site_' || site_id_arg || '_dashboard_data';
+    -- Replace spaces with underscores and lower case the site name for the view name
+    sanitized_site_name := REPLACE(LOWER(site_name_arg), ' ', '_');
 
-    -- Construct the view definition dynamically
-    view_ddl := FORMAT($f$
-        CREATE OR REPLACE VIEW site_schema.%I AS
+    -- Construct the view name dynamically using the site ID and sanitized site name
+    view_name := 'site_' || site_id_arg || '_' || sanitized_site_name || '_summary';
+
+    -- Construct the dynamic SQL for creating the view
+    dynamic_sql := format($f$ CREATE VIEW site_schema.%I AS
         SELECT
-            EXTRACT(DOW FROM sub.created_date) AS weekday,
-            EXTRACT(MONTH FROM sub.created_date) AS month,
-            EXTRACT(YEAR FROM sub.created_date) AS year,
-            f.form_name,
-            COUNT(sub.submission_id) AS submission_count,
-            COUNT(ans.answer_id) AS answer_count
+            s.site_id,
+            s.site_name,
+            DATE_TRUNC('week', sub.created_date) AS report_week,
+            DATE_TRUNC('month', sub.created_date) AS report_month,
+            DATE_TRUNC('day', sub.created_date) AS report_day,
+            EXTRACT(YEAR FROM sub.created_date) AS report_year,
+            COUNT(DISTINCT CASE WHEN sub.form_id = 1 THEN sub.submission_id END) + 
+            COUNT(DISTINCT CASE WHEN sub.form_id = 3 AND ans.question_id = 18 AND ans.question_option_id = 36 THEN sub.submission_id END) AS total_visits,
+            COUNT(DISTINCT CASE WHEN sub.form_id = 1 THEN sub.submission_id END) AS total_consumption,
+           
+			-- Age demographics
+			COUNT(CASE  WHEN sub.form_id = 1 AND  ans.question_id = 2 AND EXTRACT(YEAR FROM AGE(CAST(ans.answer_date AS DATE))) < 20 THEN 1 END) AS under_20,
+			COUNT(CASE  WHEN sub.form_id = 1 AND  ans.question_id = 2 AND EXTRACT(YEAR FROM AGE(CAST(ans.answer_date AS DATE))) BETWEEN 20 AND 29 THEN 1 END) AS age_20_29,
+			COUNT(CASE  WHEN sub.form_id = 1 AND  ans.question_id = 2 AND EXTRACT(YEAR FROM AGE(CAST(ans.answer_date AS DATE))) BETWEEN 30 AND 39 THEN 1 END) AS age_30_39,
+			COUNT(CASE  WHEN sub.form_id = 1 AND  ans.question_id = 2 AND EXTRACT(YEAR FROM AGE(CAST(ans.answer_date AS DATE))) BETWEEN 40 AND 49 THEN 1 END) AS age_40_49,
+			COUNT(CASE  WHEN sub.form_id = 1 AND  ans.question_id = 2 AND EXTRACT(YEAR FROM AGE(CAST(ans.answer_date AS DATE))) BETWEEN 50 AND 59 THEN 1  END) AS age_50_59,
+			COUNT(CASE  WHEN sub.form_id = 1 AND  ans.question_id = 2 AND EXTRACT(YEAR FROM AGE(CAST(ans.answer_date AS DATE))) >= 60 THEN 1  END) AS over_60,
+			COUNT(CASE  WHEN sub.form_id = 1 AND  ans.question_id = 2 AND (ans.answer_date IS NULL OR ans.answer_date = '') THEN 1 END) AS age_unknown
+
+			-- Client demographics based on question_option_id
+			COUNT(DISTINCT CASE WHEN sub.form_id = 1 AND  ans.question_id = 3 AND ans.question_option_id = 1 THEN sub.submission_id END) AS Male_clients,
+			COUNT(DISTINCT CASE WHEN sub.form_id = 1 AND  ans.question_id = 3 AND ans.question_option_id = 2 THEN sub.submission_id END) AS Female_clients,
+			COUNT(DISTINCT CASE WHEN sub.form_id = 1 AND  ans.question_id = 3 AND ans.question_option_id = 3 THEN sub.submission_id END) AS Other_clients,
+
+			COUNT(DISTINCT CASE WHEN sub.form_id = 1 AND ans.question_id = 4 AND ans.answer_boolean = TRUE  THEN sub.submission_id  END) AS new_clients,
+			COUNT(DISTINCT CASE WHEN sub.form_id = 1 AND ans.question_id = 4 AND ans.answer_boolean = FALSE THEN sub.submission_id  END) AS unique_clients,
+
+			COUNT(DISTINCT CASE WHEN sub.form_id = 1 AND  ans.question_id = 6 AND ans.question_option_id = 4 THEN sub.submission_id END) AS cocaine_usage,
+			COUNT(DISTINCT CASE WHEN sub.form_id = 1 AND  ans.question_id = 6 AND ans.question_option_id = 5 THEN sub.submission_id END) AS crack_usage,
+			COUNT(DISTINCT CASE WHEN sub.form_id = 1 AND  ans.question_id = 6 AND ans.question_option_id = 6 THEN sub.submission_id END) AS methamphetamine_usage,
+			COUNT(DISTINCT CASE WHEN sub.form_id = 1 AND  ans.question_id = 6 AND ans.question_option_id = 7 THEN sub.submission_id END) AS amphetamine_usage,
+			COUNT(DISTINCT CASE WHEN sub.form_id = 1 AND  ans.question_id = 6 AND ans.question_option_id = 8 THEN sub.submission_id END) AS heroin_usage,
+			COUNT(DISTINCT CASE WHEN sub.form_id = 1 AND  ans.question_id = 6 AND ans.question_option_id = 9 THEN sub.submission_id END) AS fentanyl_usage,
+			COUNT(DISTINCT CASE WHEN sub.form_id = 1 AND  ans.question_id = 6 AND ans.question_option_id = 10 THEN sub.submission_id END) AS oxycontin_oxycodone_usage,
+			COUNT(DISTINCT CASE WHEN sub.form_id = 1 AND  ans.question_id = 6 AND ans.question_option_id = 11 THEN sub.submission_id END) AS morphine_usage,
+			COUNT(DISTINCT CASE WHEN sub.form_id = 1 AND  ans.question_id = 6 AND ans.question_option_id = 12 THEN sub.submission_id END) AS hydromorphone_dilaudid_usage,
+			COUNT(DISTINCT CASE WHEN sub.form_id = 1 AND  ans.question_id = 6 AND ans.question_option_id = 13 THEN sub.submission_id END) AS unspecified_opioid_usage,
+			COUNT(DISTINCT CASE WHEN sub.form_id = 1 AND  ans.question_id = 6 AND ans.question_option_id = 14 THEN sub.submission_id END) AS speedball_usage,
+			COUNT(DISTINCT CASE WHEN sub.form_id = 1 AND  ans.question_id = 6 AND ans.question_option_id = 15 THEN sub.submission_id END) AS other_substances_usage,
+			COUNT(DISTINCT CASE WHEN sub.form_id = 1 AND  ans.question_id = 6 AND ans.question_option_id = 16 THEN sub.submission_id END) AS unknown_not_specified_substance_usage,
+
+
+
+			-- Count of non-fatal overdoses
+			COUNT(DISTINCT CASE WHEN sub.form_id = 2 AND  ans.question_id = 10 AND ans.question_option_id = 17 THEN sub.submission_id END) AS non_fatal_overdoses,
+			-- Count of fatal overdoses
+			COUNT(DISTINCT CASE WHEN sub.form_id = 2 AND  ans.question_id = 10 AND ans.question_option_id = 18 THEN sub.submission_id END) AS fatal_overdoses,
+			-- Count of other medical emergencies
+			COUNT(DISTINCT CASE WHEN sub.form_id = 2 AND  ans.question_id = 10 AND ans.question_option_id = 19 THEN sub.submission_id END) AS other_medical_emergencies,
+			-- Count of law enforcement calls
+			COUNT(DISTINCT CASE WHEN sub.form_id = 2 AND  ans.question_id = 10 AND ans.question_option_id =20 THEN sub.submission_id END) AS law_enforcement_calls,
+			-- Count of incidents where naloxone was administered
+			COUNT(DISTINCT CASE WHEN sub.form_id = 2 AND  ans.question_id = 11 AND ans.answer_boolean = TRUE THEN sub.submission_id END) AS naloxone_administered,
+			-- Count of incidents where EMS was called
+			COUNT(DISTINCT CASE WHEN sub.form_id = 2 AND  ans.question_id = 12 AND ans.answer_boolean = TRUE THEN sub.submission_id END) AS ems_called
+
+			COUNT(DISTINCT CASE WHEN sub.form_id = 3 THEN sub.submission_id END) AS total_consumption, total_referrals
+
+
+			-- Counting null answers for each submission
+			SUM(CASE WHEN ans.question_option_id IS NULL AND ans.answer_text IS NULL AND ans.answer_date IS NULL AND ans.answer_boolean IS NULL THEN 1 ELSE 0 END) AS null_answers_count,
+
+			-- Total questions per form (assuming a fixed number of questions per form for simplicity)
+			SUM(CASE WHEN sub.form_id = 1 THEN 10 WHEN sub.form_id = 2 THEN 8 WHEN sub.form_id = 3 THEN 6 END) AS total_questions_per_submission,
+
+			-- Proportion of unanswered questions
+			AVG(CASE
+				WHEN qt.type_name = 'Text' AND ans.answer_text IS NOT NULL THEN 0
+				WHEN qt.type_name = 'Date' AND ans.answer_date IS NOT NULL THEN 0
+				WHEN qt.type_name = 'Boolean' AND ans.answer_boolean IS NOT NULL THEN 0
+				WHEN qt.type_name IN ('Dropdown', 'Radio Button', 'Checkbox') AND ans.question_option_id IS NOT NULL THEN 0
+				ELSE 1
+			END) * 100 AS percentage_unanswered
+
+			-- Substance usage among new and unique clients
+			COUNT(DISTINCT CASE WHEN ans_new_clients.answer_boolean = TRUE AND ans_drugs.question_id = 6 THEN sub.submission_id END) AS drug_usage_new_clients,
+			COUNT(DISTINCT CASE WHEN ans_new_clients.answer_boolean = FALSE AND ans_drugs.question_id = 6 THEN sub.submission_id END) AS drug_usage_unique_clients,
+
+			-- Correlation between interventions and incidents
+			COUNT(DISTINCT CASE WHEN ans_naloxone.answer_boolean = TRUE THEN sub.submission_id END) AS naloxone_interventions,
+			COUNT(DISTINCT CASE WHEN ans_ems.answer_boolean = TRUE THEN sub.submission_id END) AS ems_interventions,
+			COUNT(DISTINCT CASE WHEN ans_incidents.question_id = 10 THEN sub.submission_id END) AS total_incidents,
+
+			-- Patterns in visits, substance use, and referrals
+			COUNT(DISTINCT sub.submission_id) AS total_visits_pattern,
+			COUNT(DISTINCT CASE WHEN ans_drugs.question_id = 6 THEN sub.submission_id END) AS total_substance_use_cases,
+			COUNT(DISTINCT CASE WHEN sub.form_id = 3 THEN sub.submission_id END) AS total_referrals_pattern,
+
+			-- Variation in substance use across demographic groups
+			COUNT(DISTINCT CASE WHEN ans_gender.question_id = 3 AND ans_gender.answer_text = 'Male' AND ans_drugs.question_id = 6 THEN sub.submission_id END) AS male_substance_use,
+			COUNT(DISTINCT CASE WHEN ans_gender.question_id = 3 AND ans_gender.answer_text = 'Female' AND ans_drugs.question_id = 6 THEN sub.submission_id END) AS female_substance_use,
+			COUNT(DISTINCT CASE WHEN ans_gender.question_id = 3 AND ans_gender.answer_text = 'Other' AND ans_drugs.question_id = 6 THEN sub.submission_id END) AS other_gender_substance_use
         FROM
             site_schema.submissions sub
         JOIN
-            site_schema.forms f ON sub.form_id = f.form_id
-        JOIN
             site_schema.answers ans ON sub.submission_id = ans.submission_id
         WHERE
-            sub.site_id = %s
+            sub.site_id = %L
         GROUP BY
-            weekday, month, year, f.form_name
-        ORDER BY
-            year, month, weekday, f.form_name;
-    $f$, view_name, site_id_arg);
+            s.site_id, s.site_name, report_week, report_month, report_day
+		ORDER BY
+            report_week, report_month, report_day
 
-    -- Execute the view creation dynamically
-    EXECUTE view_ddl;
+ 	$f$, view_name, site_id_arg);
+
+    -- Execute the dynamic SQL statement to create the view
+    EXECUTE dynamic_sql;
 END;
 $$ LANGUAGE plpgsql;
-
 
 
 

@@ -34,6 +34,18 @@ INSERT INTO sc_sites (site_id, site_name, address_line1, address_line2, postal_c
     (19, 'Sunrise Medical Services', '555 Sunrise St', NULL, 'S6S 3L8', 'Sunrise City', 'NB', 'Fixed'),
     (20, 'Seaside Health Center', '123 Seaside Rd', NULL, 'S1S 2P5', 'Seaside', 'NL', 'Fixed');
 
+INSERT INTO staffs (staff_id, username, email, password_hash, role_id, site_id) VALUES
+    (121, 'Emily_Jones_role1_b98b8126', 'Emily_Jones_role1_b98b8126@example.com', '6865ab97245dbf8d0b40d35571b2219b', 2, 1),
+    (122, 'Michael_Johnson_role1_66c7f412', 'Michael_Johnson_role1_66c7f412@example.com', '5e6ddcf029b2180a0a18027161b980a9', 2, 1),
+    (123, 'Michael_Jones_role1_c6c74a2f', 'Michael_Jones_role1_c6c74a2f@example.com', '7b7e43f4dfbe73ffd5f3961a60a47bc8', 2, 2),
+    (124, 'John_Johnson_role1_c868afc0', 'John_Johnson_role1_c868afc0@example.com', '47f4f7fa2a684cbe0765440b49b6f62b', 2, 2),
+    (125, 'Michael_Jones_role1_a2926982', 'Michael_Jones_role1_a2926982@example.com', '1847c84fc8716da6d51227f5f0626be1', 2, 3),
+    (126, 'Sarah_Smith_role1_c09f69f8', 'Sarah_Smith_role1_c09f69f8@example.com', '60440a8f3012b943a042130082ef5d0f', 2, 3),
+    (127, 'David_Brown_role1_c40fa326', 'David_Brown_role1_c40fa326@example.com', '7da6c8ede18254c8a7f11424ac11bac5', 2, 4),
+    (128, 'Sarah_Williams_role1_31c1bd60', 'Sarah_Williams_role1_31c1bd60@example.com', 'edc20a4f6fdf0db49bfd5c7f83d6dd5d', 2, 4),
+    (129, 'Jane_Garcia_role1_0b667bf5', 'Jane_Garcia_role1_0b667bf5@example.com', 'f226871d71a4df5410b55a3e82d4b2a5', 2, 5),
+    (130, 'Jane_Brown_role1_2c8549d0', 'Jane_Brown_role1_2c8549d0@example.com', '0cc8ff7e0a5f5888031fa312ab40b664', 2, 5);
+
 
 
 -- Insert forms
@@ -78,7 +90,7 @@ VALUES
     (16, 3, 'Client Name:', 1, TRUE),
     (17, 3, 'Date of referral:', 2, TRUE),
     (18, 3, 'What was the primary purpose of visit today? ', 5, TRUE),
-    (19, 3, 'Type of service referred to:', 3, TRUE),
+    (19, 3, 'Type of service referred to:', 5, TRUE),
     (20, 3, 'Specific service or organization referred to:', 5, FALSE),
     (21, 3, 'Reason for referral:', 1, TRUE),
 
@@ -133,31 +145,31 @@ INSERT INTO site_schema.question_options (question_option_id, question_id, deter
 (32, 14, 'Other substances'),
 (33, 14, 'Unknown/not specified')
 
+-- For 'What was the primary purpose of visit today?' question
 (34, 18,'Supervised drug consumption'),
 (35, 18,'Access to wrap-around services'),
 (36, 18,'Referral services only'),
-(37, 18,'Other');
+(37, 18,'Other'),
 
+-- For 'Type of service referred to:' question
+(38, 19, 'Addictions services'),
+(39, 19, 'Harm reduction services'),
+(40, 19, 'Clinical service providers - HIV Care'),
+(41, 19, 'Clinical service providers - Urgent Care'),
+(42, 19, 'Clinical service providers - Primary Care'),
+(43, 19, 'Clinical service providers - Other Care'),
+(44, 19, 'Mental health service providers'),
+(45, 19, 'HIV/STI testing'),
+(46, 19, 'Hep C teams'),
+(47, 19, 'Hep C testing other (non-Hep C team)'),
+(48, 19, 'Hep C treatment other (non-Hep C team)'),
+(49, 19, 'Community-based HIV service providers'),
+(50, 19, 'Other community-based service providers'),
 
+-- For 'Specific service or organization referred to:' question
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+(51, 20, 'Indigenous Traditional Services'),
+(52, 20, 'Brief Counselling'),
+(53, 20, 'Harm Reduction Teaching'),
+(54, 20, 'Practical Support');
 
