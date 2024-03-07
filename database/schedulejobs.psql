@@ -1,0 +1,8 @@
+CREATE EXTENSION IF NOT EXISTS pg_cron;
+
+-- SELECT cron.schedule('MyMonthlyJob', '0 1 1 * *', $$INSERT INTO my_table(my_column) VALUES('My monthly task ran')$$);
+SELECT cron.schedule(
+    'MonthlyHCBatch', '0 1 15 * *',  -- Schedule at 01:00 (1 AM) on the 15th day of every month
+    $$REFRESH MATERIALIZED VIEW site_schema.total_sites_summary_materialized$$
+);
+
