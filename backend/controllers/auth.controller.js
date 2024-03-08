@@ -4,7 +4,7 @@ const roleEnum = require('../config/roleEnum');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const Role = require('../config/roleEnum');
-
+const Logs = db.logs;
 const User = db.supervised_users;
 
 exports.signUp = async (req, res) => {
@@ -21,6 +21,11 @@ exports.signUp = async (req, res) => {
             });
         }
         if (newUser) {
+            await Logs.create({
+                supervised_user_id: req.session.user.staff_id,
+                log_type: 'Creation',
+                log_description: `User ${newUser.username} registered successfully!`,
+            });
             res.send({
                 message: `User ${newUser.username} registered successfully!`,
             });

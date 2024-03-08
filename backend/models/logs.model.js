@@ -5,9 +5,6 @@ module.exports = (sequelize, Sequelize) => {
             autoIncrement: true,
             primaryKey: true,
         },
-        session_id: {
-            type: Sequelize.INTEGER,
-        },
         supervised_user_id: {
             type: Sequelize.INTEGER,
         },
@@ -20,6 +17,6 @@ module.exports = (sequelize, Sequelize) => {
     });
     // Sync the tables in db, create if not exists or changed the schema
     // Uncommented the sync for all models when first run to create table
-    //Logs.sync({ alter: true });
+    Logs.sync({ alter: true });
     return Logs;
 };
