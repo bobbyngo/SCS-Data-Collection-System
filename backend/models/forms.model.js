@@ -22,7 +22,7 @@ module.exports = (sequelize, Sequelize) => {
     
 
     // Uncommented for first run
-    //Forms.sync({ force: true });
+    Forms.sync({ force: true });
 
     return Forms;
 };

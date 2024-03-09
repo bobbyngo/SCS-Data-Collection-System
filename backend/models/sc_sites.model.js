@@ -27,6 +27,6 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.STRING,
         },
     });
-    //Sites.sync({ alter: true });
+    Sites.sync({ alter: true });
     return Sites;
 };
