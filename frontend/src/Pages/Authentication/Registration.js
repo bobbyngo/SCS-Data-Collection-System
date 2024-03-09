@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './AuthStyles.css'; // Ensure this path is correct for your project
+import './AuthStyles.css'; 
 
 const Registration = () => {
   const [userDetails, setUserDetails] = useState({
@@ -29,7 +29,7 @@ const Registration = () => {
     }
     setErrorMessage('');
 
-    // Implement your registration logic here, possibly calling an AuthService.register() method
+    // Implement registration logic
   };
 
   return (

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import './AuthStyles.css'; // Ensure this path is correct for your project
+import './AuthStyles.css'; 
 
 const Login = () => {
     const [credentials, setCredentials] = useState({ username: '', password: '' });
@@ -7,8 +7,8 @@ const Login = () => {
     useEffect(() => {
       // Set the title of the tab when the component mounts
       document.title = "SCS Login";
-  }, []); 
-  
+    }, []); 
+
     const handleChange = (event) => {
       const { name, value } = event.target;
       setCredentials({ ...credentials, [name]: value });
@@ -16,7 +16,7 @@ const Login = () => {
 
     const handleSubmit = async (event) => {
       event.preventDefault();
-      // Implement your login logic here, possibly calling AuthService.login(credentials)
+      // Implement login logic here
     };
 
     return (

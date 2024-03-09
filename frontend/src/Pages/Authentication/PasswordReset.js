@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import './AuthStyles.css'; // Make sure this path is correct
-
+import './AuthStyles.css'; 
 const PasswordReset = () => {
   const [email, setEmail] = useState('');
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // Implement the password reset logic here
-    console.log(email); // For testing, to see if the email is captured
+    // password reset logic here
+    console.log(email); 
   };
 
   useEffect(() => {
@@ -16,7 +15,7 @@ const PasswordReset = () => {
   }, []); 
 
   return (
-    <div className="auth-container"> {/* Ensure this class exists in your CSS */}
+    <div className="auth-container"> 
       <form onSubmit={handleSubmit} className="auth-form">
         <label htmlFor="email" className="label">Email:</label>
         <input
