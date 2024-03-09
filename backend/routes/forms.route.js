@@ -22,7 +22,7 @@ module.exports = function (app) {
      * @Method GET
      * @endpoint http://localhost:4000/api/form/all
      */
-    app.get('/api/form/all', verifyAuthToken, controller.getForms);
+    app.get('/api/form/all', controller.getForms);
 
     /**
      * Update a the form based on the id

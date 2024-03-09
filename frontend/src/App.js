@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import NavBar from './Component/NavBar/NavBar.js';
 // import { QuestionForm } from './Component/QuestionForm';
 import { Login, NewPassword, PasswordReset, Registration} from './Pages/Authentication';
-import { ClientIntakeForm, IncidentReportForm, ReferralForm, QuestionForm, ClientForm } from './Pages/Forms';
+import { ClientIntakeForm, IncidentReportForm, ReferralForm, QuestionForm, ClientForm, Forms } from './Pages/Forms';
 import './App.css';
 
 
@@ -24,6 +24,7 @@ function App() {
 					{/* <Route path='CreateForm' element={<CreateForm />} /> */}
 					<Route path='QuestionForm' element={<QuestionForm />} />
 					<Route path='ClientForm' element={<ClientForm />} />
+					<Route path="/forms" element={<Forms />} />
 				</Routes>
 			</BrowserRouter>
 			<div id='footer'>&copy; COPYRIGHT 2024 SCS GROUP PROJECT, INC </div> 

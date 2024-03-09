@@ -253,3 +253,18 @@ p {
   .form-container {
     position: relative;
   }
+
+  .forms-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.form-card {
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 8px;
+    width: 300px; /* or any width you prefer */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}

@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import './AuthStyles.css'; // Ensure this path is correct for your project
+import './AuthStyles.css'; 
 const NewPassword = () => {
   const [passwordData, setPasswordData] = useState({
     currentPassword: '',
