@@ -24,6 +24,6 @@ module.exports = (sequelize, Sequelize) => {
             await Question_Type.bulkCreate(data);
         }
     }
-    populateType();
+    //populateType();
     return Question_Type;
 };
