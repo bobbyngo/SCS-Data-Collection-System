@@ -23,4 +23,27 @@ module.exports = function (app) {
      * @endpoint http://localhost:4000/api/form/all
      */
     app.get('/api/form/all', verifyAuthToken, controller.getForms);
+
+    /**
+     * Update a the form based on the id
+     * @Method PUT
+     * @endpoint http://localhost:4000/api/form/:id
+     *
+     * For example, :id is form id, http://localhost:4000/api/form/1
+     * @RequestBody
+     * {
+     *      form_name: "CLient Intake Form"
+     * }
+     *
+     */
+    app.put('/api/form/:id', verifyAuthToken, controller.updateForm);
+
+    /**
+     * Delete a the form giving the id
+     * @Method DELETE
+     * @endpoint http://localhost:4000/api/form/:id
+     *
+     * For example, :id is form id, http://localhost:4000/api/form/1
+     */
+    app.delete('/api/form/:id', verifyAuthToken, controller.deleteForm);
 };
