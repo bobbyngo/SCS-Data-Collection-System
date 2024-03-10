@@ -3,7 +3,9 @@
 
 
 CREATE OR REPLACE FUNCTION site_schema.create_site_view(site_id_arg INTEGER)
-RETURNS VOID AS $$
+    RETURNS void
+    LANGUAGE 'plpgsql'  
+AS $BODY$
 DECLARE
     dynamic_sql TEXT;
 BEGIN
@@ -77,30 +79,35 @@ BEGIN
     -- Execute the dynamic SQL to create the view
     EXECUTE dynamic_sql;
 END;
+$BODY$
+
+
+
 
 
 
 
 --Generate random email and password for clint using role_id and site_id
-CREATE OR REPLACE FUNCTION site_schema.generate_staff_email_password(
-    role_id_input INTEGER,
-    site_id_input INTEGER DEFAULT NULL
-)
-RETURNS VOID AS $$
+CREATE OR REPLACE FUNCTION site_schema."site_schema.generate_staff_email_passwords"(role_id integer, site_id integer DEFAULT NULL)
+RETURNS void
+LANGUAGE 'plpgsql'  
+AS $BODY$
 DECLARE
+	s_site_id integer := site_id;
+    s_role_id integer := role_id;
     staff_record RECORD;
     new_email TEXT;
     new_password TEXT;
     email_domain TEXT := '@example.com';
     password_characters TEXT := 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    password_length INT := 5; -- You can adjust the length of the password
+    password_length INT := 5; -- length of the password
 BEGIN
     FOR staff_record IN
-        SELECT s.*, r.role_name
+        SELECT s.site_id, s.staff_id, r.role_name
         FROM site_schema.staffs s
         JOIN site_schema.roles r ON s.role_id = r.role_id
-        WHERE (s.site_id = site_id_input OR site_id_input IS NULL)
-          AND s.role_id = role_id_input
+        WHERE (s.site_id = s_site_id OR s_site_id IS NULL)
+          AND s.role_id = s_role_id
     LOOP
         -- Generate new email incorporating the role
         new_email := 'staff_' || staff_record.role_name || '_' || staff_record.staff_id || email_domain;
@@ -110,15 +117,12 @@ BEGIN
         FOR i IN 1..password_length LOOP
             new_password := new_password || substr(password_characters, (random() * (length(password_characters) - 1) + 1)::INTEGER, 1);
         END LOOP;
-        new_password := md5(new_password); -- Hash the password, consider using a more secure hashing mechanism
-
+        new_password := md5(new_password); -- Hash the password,
         -- Update staff record with new email and password hash
         UPDATE site_schema.staffs
         SET email = new_email, password_hash = new_password
         WHERE staff_id = staff_record.staff_id;
     END LOOP;
 END;
-$$ LANGUAGE plpgsql;
-
-
+$BODY$
 
