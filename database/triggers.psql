@@ -1,13 +1,16 @@
 
 
 CREATE OR REPLACE FUNCTION site_schema.create_new_site_view()
-RETURNS TRIGGER AS $$
+RETURNS TRIGGER     LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE NOT LEAKPROOF STRICT SECURITY DEFINER
+AS $BODY$
 DECLARE
     dynamic_sql TEXT;
     site_id_arg INTEGER := NEW.site_id;
     site_name_arg TEXT := TG_ARGV[0];
 BEGIN
-    dynamic_sql := format( $f$ CREATE OR REPLACE VIEW site_schema.site_%I_summary_metrics AS
+    dynamic_sql := format( $f$ CREATE OR REPLACE VIEW site_schema.site_%s_summary_metrics AS
 		SELECT
 			s.site_id,
 			s.site_name,
@@ -74,7 +77,7 @@ BEGIN
     EXECUTE dynamic_sql;
     RETURN NEW;
 END;
-$$ LANGUAGE plpgsql;
+$BODY$
 
 
 CREATE TRIGGER after_site_insert
@@ -98,10 +101,10 @@ DECLARE
     site_id_arg INTEGER := NEW.site_id;
     site_name_arg TEXT := TG_ARGV[0];
 BEGIN
-    dynamic_sql := format( $f$ CREATE OR REPLACE VIEW site_schema.site_%I_relevant_analysis AS
+    dynamic_sql := format( $f$ CREATE OR REPLACE VIEW site_schema.site_%s_relevant_analysis AS
 		WITH incident_drug_usage_stats AS (
 			SELECT
-				sub.site_id
+				sub.site_id,
 				qo.determined_answer AS drug,
 				COUNT(DISTINCT sub.submission_id) AS incident_drug_usage
 			FROM
