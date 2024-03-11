@@ -35,7 +35,7 @@ module.exports = (sequelize, Sequelize) => {
             await Role.bulkCreate(data);
         }
     }
-    populateRole();
+    //populateRole();
 
     return Role;
 };
