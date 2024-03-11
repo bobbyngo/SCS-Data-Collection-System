@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const cookieSession = require('cookie-session');
 const cookieConfig = require('./config/auth.secret');
+// Import the authentication middleware
+const verifyAuthToken = require('./middleware/signInCheck');
 
 // Express config
 const app = express();
@@ -21,7 +23,7 @@ app.use(
 const port = process.env.APP_PORT || 4000;
 
 // home route
-app.get('/', (req, res) => {
+app.get('/', verifyAuthToken, (req, res) => {
     res.json({ message: 'Default home page' });
 });
 
