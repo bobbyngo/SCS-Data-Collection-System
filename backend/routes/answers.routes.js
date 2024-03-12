@@ -72,7 +72,7 @@ module.exports = function (app) {
         }
      */
     app.put(
-        '/api/submissions/:sid/answers/aid',
+        '/api/submissions/:sid/answer/:aid',
         [verifyAuthToken, authMiddleware.isSiteRole],
         controller.updateAnswer
     );

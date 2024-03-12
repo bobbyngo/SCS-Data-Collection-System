@@ -3,7 +3,34 @@ const transporter = require('../utils/email_notification');
 const Submissions = db.Submissions;
 const Answers = db.answers;
 
+exports.submitAnswers = async (req, res) => {
 
+
+    try {
+                // Create a new submission
+            // Create a new submission
+        const submission = await Submissions.create({
+            form_id: req.body.form_id,
+            staff_id: req.session.user.staff_id,
+            site_id: req.body.site_id,
+        });
+        const answers = req.body.answers.map(answer => ({
+            submission_id: submission.submission_id,
+            question_id: answer.question_id,
+            answer_text: answer.answer_text,
+            answer_boolean: answer.answer_boolean,
+            answer_date: answer.answer_date,
+            question_option_id: answer.question_option_id,
+
+
+        }));
+
+        await Answers.bulkCreate(answers);
+        res.send({ message: "Answers submitted successfully." });
+    } catch (e) {
+        res.status(500).send({ message: e.message });
+    }
+};
 
 
 exports.findAllAnswers = async (req, res) => {
