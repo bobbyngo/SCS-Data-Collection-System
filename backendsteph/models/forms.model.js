@@ -7,9 +7,17 @@ module.exports = (sequelize, Sequelize) => {
         },
         site_id: {
             type: Sequelize.INTEGER,
+            references: {
+                model: 'sc_sites',
+                key: 'site_id'
+            }, allowNull: true
         },
-        user_id: {
+        staff_id: {
             type: Sequelize.INTEGER,
+            references: {
+                model: 'staffs',
+                key: 'staff_id'
+            }, allowNull: false
         },
         form_name: {
             type: Sequelize.STRING,
@@ -17,6 +25,14 @@ module.exports = (sequelize, Sequelize) => {
         is_published: {
             type: Sequelize.BOOLEAN,
             defaultValue: false,
+        },
+        created_date: {
+            type: Sequelize.DATE,
+            defaultValue: Sequelize.NOW,
+        },
+        updated_date: {
+            type: Sequelize.DATE,
+            defaultValue: Sequelize.NOW,
         },
     });
     

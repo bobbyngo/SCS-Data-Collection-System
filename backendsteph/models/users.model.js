@@ -11,7 +11,10 @@ module.exports = (sequelize, Sequelize) => {
         },
         site_id: {
             type: Sequelize.INTEGER,
-
+            references: {
+                model: 'sc_sites',
+                key: 'site_id'
+            }, allowNull: true
         },
         role_id: {
             type: Sequelize.INTEGER,

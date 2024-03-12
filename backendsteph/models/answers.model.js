@@ -7,10 +7,19 @@ module.exports = (sequelize, Sequelize) => {
         },
         submission_id: {
             type: Sequelize.INTEGER,
+            allowNull: false,
+            references: {
+                model: 'submissions',
+                key: 'submission_id'
+            }
         },
         question_id: {
             type: Sequelize.INTEGER,
             allowNull: false,
+            references: {
+                model: 'questions',
+                key: 'question_id'
+            }
         },
         answer_text: {
             type: Sequelize.STRING,
@@ -19,6 +28,10 @@ module.exports = (sequelize, Sequelize) => {
         question_option_id: {
             type: Sequelize.INTEGER,
             allowNull: true,
+            references: {
+                model: 'question_options',
+                key: 'question_option_id'
+            }
         },
         answer_date: {
             type: Sequelize.DATE,

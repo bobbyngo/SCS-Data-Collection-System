@@ -18,7 +18,7 @@ app.use(
     })
 );
 
-const port = process.env.APP_PORT || 4000;
+const port = process.env.APP_PORT || 5000;
 
 // home route
 app.get('/', (req, res) => {
@@ -33,6 +33,6 @@ require('./routes/answers.routes')(app);
 require('./routes/users.routes')(app);
 require('./routes/submissions.routes')(app);
 
-app.listen(port, () => {
+/* app.listen(port, () => {
     console.log(`App listening at http://localhost:${port}`);
-});
+}); */

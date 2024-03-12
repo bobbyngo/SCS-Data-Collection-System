@@ -8,19 +8,17 @@ exports.createSubmission = async (req, res) => {
             staff_id: req.session.user.staff_id,
             site_id: req.body.site_id,
         });
-        res.status(201).json(submission);
+        res.status(200).send(submission);
     } catch (error) {
         res.status(500).send({ message: error.message });
     }
 };
 exports.updateSubmission = async (req, res) => {
     try {
-        const updated = await Submission.update(req.body, {
-            where: { submission_id: req.params.id }
-        });
+        const updated = await Submission.update(req.body, { where: { submission_id: req.params.id }});
         if (updated) {
             const updatedSubmission = await Submission.findByPk(req.params.id);
-            res.status(200).json(updatedSubmission);
+            res.status(200).send(updatedSubmission);
         } else {
             res.status(404).send({ message: 'Submission not found' });
         }
@@ -29,11 +27,13 @@ exports.updateSubmission = async (req, res) => {
     }
 };
 
+
+
 exports.getSubmission = async (req, res) => {
     try {
         const submission = await Submission.findByPk(req.params.id);
         if (submission) {
-            res.status(200).json(submission);
+            res.status(200).send(submission);;
         } else {
             res.status(404).send({ message: 'Submission not found' });
         }
@@ -44,12 +44,8 @@ exports.getSubmission = async (req, res) => {
 
 exports.getAllSubmission = async (req, res) => {
     try {
-        const submission = await Submission.findByPk(req.params.id);
-        if (submission) {
-            res.status(200).json(submission);
-        } else {
-            res.status(404).send({ message: 'Submission not found' });
-        }
+        const submissions = await Submission.findAll();
+        res.status(200).send(submissions);
     } catch (error) {
         res.status(500).send({ message: error.message });
     }

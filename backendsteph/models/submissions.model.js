@@ -7,9 +7,24 @@ module.exports = (sequelize, Sequelize) => {
         },
         form_id: {
             type: Sequelize.INTEGER,
+            references: {
+                model: 'forms',
+                key: 'form_id'
+            }, allowNull: false
+        },
+        site_id: {
+            type: Sequelize.INTEGER,
+            references: {
+                model: 'sc_sites',
+                key: 'site_id'
+            }, allowNull: false
         },
         staff_id: {
             type: Sequelize.INTEGER,
+            references: {
+                model: 'staffs',
+                key: 'staff_id'
+            }, allowNull: false
         },
         created_date: {
             type: Sequelize.DATE,
