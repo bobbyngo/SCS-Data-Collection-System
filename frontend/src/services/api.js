@@ -1,10 +1,16 @@
 import axios from 'axios';
 
 const login = async (username, password) => {
-    const res = await axios.post('http://localhost:4000/api/auth/signin', {
-        username,
-        password_hash: password,
-    });
+    const res = await axios.post(
+        'http://localhost:4000/api/auth/signin',
+        {
+            username,
+            password_hash: password,
+        },
+        {
+            withCredentials: true,
+        }
+    );
     console.log(res);
     return res.data;
 };

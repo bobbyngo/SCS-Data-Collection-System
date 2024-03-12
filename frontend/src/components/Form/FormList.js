@@ -5,8 +5,29 @@ import '../styles/FormList.css';
 
 const FormList = () => {
     const [forms, setForms] = useState([]);
+    const [showCreateFormModal, setShowCreateFormModal] = useState(false);
+    const [showUpdateFormModal, setShowUpdateFormModal] = useState(false);
+    const [newFormName, setNewFormName] = useState('');
     let userData = localStorage.getItem('user');
     let token = JSON.parse(userData).jwtToken;
+
+    const handleCreateForm = async () => {
+        try {
+            await axios.post(
+                'http://localhost:4000/api/form/create',
+                { form_name: newFormName },
+                {
+                    withCredentials: true,
+                }
+            );
+            // Refresh the form list after creating a new form
+            getForms();
+            setShowCreateFormModal(false);
+            setNewFormName('');
+        } catch (error) {
+            console.error('Error creating form:', error);
+        }
+    };
 
     const handleDelete = async (id) => {
         try {
@@ -26,9 +47,7 @@ const FormList = () => {
             const response = await axios.get(
                 'http://localhost:4000/api/form/all',
                 {
-                    headers: {
-                        Authorization: `Bearer ${token}`, // Send JWT token in the Authorization header
-                    },
+                    withCredentials: true,
                 }
             );
             setForms(response.data);
@@ -44,6 +63,12 @@ const FormList = () => {
     return (
         <div className='mt-5'>
             <h2>Form List</h2>
+            <button
+                className='btn btn-success mb-3'
+                onClick={() => setShowCreateFormModal(true)}
+            >
+                Create Form
+            </button>
             <table className='table table-striped'>
                 <thead>
                     <tr>
@@ -81,6 +106,27 @@ const FormList = () => {
                     ))}
                 </tbody>
             </table>
+
+            {showCreateFormModal && (
+                <div className='modal'>
+                    <div className='modal-content'>
+                        <span
+                            className='close'
+                            onClick={() => setShowCreateFormModal(false)}
+                        >
+                            &times;
+                        </span>
+                        <h2>Create Form</h2>
+                        <input
+                            type='text'
+                            value={newFormName}
+                            onChange={(e) => setNewFormName(e.target.value)}
+                            placeholder='Enter form name'
+                        />
+                        <button onClick={handleCreateForm}>Create</button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
