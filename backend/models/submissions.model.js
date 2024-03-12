@@ -1,6 +1,6 @@
 module.exports = (sequelize, Sequelize) => {
-    const Questions = sequelize.define('questions', {
-        question_id: {
+    const Submissions = sequelize.define('submissions', {
+        submission_id: {
             type: Sequelize.INTEGER,
             autoIncrement: true,
             primaryKey: true,
@@ -12,17 +12,19 @@ module.exports = (sequelize, Sequelize) => {
                 key: 'form_id'
             }, allowNull: false
         },
-        question_type_id: {
+        site_id: {
             type: Sequelize.INTEGER,
+            references: {
+                model: 'sc_sites',
+                key: 'site_id'
+            }, allowNull: false
         },
-        question_text: {
-            type: Sequelize.STRING,
-        },
-        is_required: {
-            type: Sequelize.BOOLEAN,
-        },
-        is_mandatoryhc: {
-            type: Sequelize.BOOLEAN,
+        staff_id: {
+            type: Sequelize.INTEGER,
+            references: {
+                model: 'staffs',
+                key: 'staff_id'
+            }, allowNull: false
         },
         created_date: {
             type: Sequelize.DATE,
@@ -33,6 +35,6 @@ module.exports = (sequelize, Sequelize) => {
             defaultValue: Sequelize.NOW,
         },
     });
-    Questions.sync({ alter: true });
-    return Questions;
+    Submissions.sync({ alter: true });
+    return Submissions;
 };

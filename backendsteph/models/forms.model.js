@@ -12,13 +12,6 @@ module.exports = (sequelize, Sequelize) => {
                 key: 'site_id'
             }, allowNull: true
         },
-        staff_id: {
-            type: Sequelize.INTEGER,
-            references: {
-                model: 'staffs',
-                key: 'staff_id'
-            }, allowNull: false
-        },
         form_name: {
             type: Sequelize.STRING,
         },
