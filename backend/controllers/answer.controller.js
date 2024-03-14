@@ -10,15 +10,30 @@ exports.submitAnswers = async (req, res) => {
             const answers = req.body.answers;
             let data = [];
             for (let i in answers) {
-                elem = {
-                    form_id: form.form_id,
-                    question_id: answers[i]['question_id'],
-                    supervised_user_id: req.session.user.staff_id,
-                    answer_text: answers[i]['answer_text'],
-                    question_option_id: answers[i]['question_option_id'],
-                };
-                data.push(elem);
+                options = answers[i]['question_option_id'];
+                if (options) {
+                    for (let j in options) {
+                        elem = {
+                            form_id: form.form_id,
+                            question_id: answers[i]['question_id'],
+                            supervised_user_id: req.session.user.staff_id,
+                            answer_text: answers[i]['answer_text'],
+                            question_option_id: options[j],
+                        };
+                        data.push(elem);
+                    }
+                } else {
+                    elem = {
+                        form_id: form.form_id,
+                        question_id: answers[i]['question_id'],
+                        supervised_user_id: req.session.user.staff_id,
+                        answer_text: answers[i]['answer_text'],
+                        question_option_id: answers[i]['question_option_id'],
+                    };
+                    data.push(elem);
+                }
             }
+            console.log(data);
             await Answers.bulkCreate(data).then((data) => {
                 res.send(data);
             });

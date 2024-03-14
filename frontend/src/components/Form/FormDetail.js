@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import FormQuestion from './FormQuestion';
+import { useParams, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
-const FormDetail = () => {
+const FormDetail = (props) => {
+    let { state } = useLocation();
+    const formName = state.form;
     const { formId } = useParams(); // Get the formId from the URL params
     const [questions, setQuestions] = useState([]);
 
@@ -27,12 +30,8 @@ const FormDetail = () => {
 
     return (
         <div className='mt-5'>
-            <h2>Questions for Form {formId}</h2>
-            <ul>
-                {questions.map((question) => (
-                    <li key={question.question_id}>{question.question_text}</li>
-                ))}
-            </ul>
+            <h2 className='survey-header'>{formName}</h2>
+            <FormQuestion questions={questions} />
         </div>
     );
 };

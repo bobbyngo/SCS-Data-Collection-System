@@ -8,6 +8,7 @@ const FormList = () => {
     const [showCreateFormModal, setShowCreateFormModal] = useState(false);
     const [showUpdateFormModal, setShowUpdateFormModal] = useState(false);
     const [newFormName, setNewFormName] = useState('');
+    const [selectedFormId, setSelectedFormId] = useState('');
     let userData = localStorage.getItem('user');
     let token = JSON.parse(userData).jwtToken;
 
@@ -29,12 +30,28 @@ const FormList = () => {
         }
     };
 
+    const handleUpdateForm = async () => {
+        try {
+            await axios.put(
+                `http://localhost:4000/api/form/${selectedFormId}`,
+                { form_name: newFormName },
+                {
+                    withCredentials: true,
+                }
+            );
+            // Refresh the form list after updating the form
+            getForms();
+            setShowUpdateFormModal(false);
+            setNewFormName('');
+        } catch (error) {
+            console.error('Error updating form:', error);
+        }
+    };
+
     const handleDelete = async (id) => {
         try {
             await axios.delete(`http://localhost:4000/api/form/${id}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`, // Send JWT token in the Authorization header
-                },
+                withCredentials: true,
             });
             setForms(forms.filter((form) => form.form_id !== id));
         } catch (error) {
@@ -85,16 +102,21 @@ const FormList = () => {
                             <td>
                                 <Link
                                     to={`/form/${form.form_id}`}
+                                    state={{ form: form.form_name }}
                                     className='btn btn-primary mr-2'
                                 >
                                     View
                                 </Link>
-                                <Link
-                                    to={`/form/${form.form_id}/edit`}
+                                <button
+                                    onClick={() => {
+                                        setNewFormName(form.form_name);
+                                        setSelectedFormId(form.form_id);
+                                        setShowUpdateFormModal(true);
+                                    }}
                                     className='btn btn-warning mr-2'
                                 >
                                     Edit
-                                </Link>
+                                </button>
                                 <button
                                     onClick={() => handleDelete(form.form_id)}
                                     className='btn btn-danger'
@@ -124,6 +146,28 @@ const FormList = () => {
                             placeholder='Enter form name'
                         />
                         <button onClick={handleCreateForm}>Create</button>
+                    </div>
+                </div>
+            )}
+            {showUpdateFormModal && (
+                <div className='modal'>
+                    <div className='modal-content'>
+                        <span
+                            className='close'
+                            onClick={() => setShowUpdateFormModal(false)}
+                        >
+                            &times;
+                        </span>
+                        <h2>Update Form</h2>
+                        <input
+                            type='text'
+                            value={newFormName}
+                            onChange={(e) => {
+                                setNewFormName(e.target.value);
+                            }}
+                            placeholder='Enter new form name'
+                        />
+                        <button onClick={handleUpdateForm}>Update</button>
                     </div>
                 </div>
             )}

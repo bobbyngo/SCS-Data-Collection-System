@@ -19,11 +19,12 @@
 }
 
 .input-field {
-    padding: 10px;
-    border: 1px solid #2a4d69; /* Dark blue border */
-    border-radius: 4px;
+    width: 100%;
+    padding: 8px;
     font-size: 16px;
-    color: #2a4d69; /* Dark blue text */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
 }
 
 .button {
@@ -33,6 +34,7 @@
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    width: 100%;
 }
 
 .button:hover {
@@ -41,4 +43,7 @@
 
 .label {
     font-weight: bold;
+}
+div {
+    margin: 10px;
 }

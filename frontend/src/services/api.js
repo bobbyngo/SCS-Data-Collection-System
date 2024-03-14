@@ -11,7 +11,6 @@ const login = async (username, password) => {
             withCredentials: true,
         }
     );
-    console.log(res);
     return res.data;
 };
 

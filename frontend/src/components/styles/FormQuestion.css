@@ -1,0 +1,116 @@
+/* FormQuestion.css */
+
+.survey-header {
+    padding: 20px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.survey-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.question {
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 15px;
+}
+
+.question-label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+    font-size: 18px;
+}
+
+.radio-label,
+.checkbox-label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.radio-label input[type='radio'],
+.checkbox-label input[type='checkbox'] {
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+input[type='date'] {
+    width: 100%;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    width: calc(100% - 30px); /* Adjusted width to fit within the card */
+    padding: 8px;
+    border: none;
+    font-size: 16px;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input[type='text'] {
+    width: 100%;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    width: calc(100% - 30px); /* Adjusted width to fit within the card */
+    padding: 8px;
+    font-size: 16px;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input[type='radio'],
+input[type='checkbox'] {
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+.submit-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top: 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* Popup styles */
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.popup-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+
+.popup-content p {
+    margin: 0;
+}
+
+.popup-content .close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    cursor: pointer;
+}
