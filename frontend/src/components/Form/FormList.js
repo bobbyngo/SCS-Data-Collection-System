@@ -181,6 +181,28 @@ const FormList = () => {
                     </div>
                 </div>
             )}
+            {showUpdateFormModal && (
+                <div className='modal'>
+                    <div className='modal-content'>
+                        <span
+                            className='close'
+                            onClick={() => setShowUpdateFormModal(false)}
+                        >
+                            &times;
+                        </span>
+                        <h2>Update Form</h2>
+                        <input
+                            type='text'
+                            value={newFormName}
+                            onChange={(e) => {
+                                setNewFormName(e.target.value);
+                            }}
+                            placeholder='Enter new form name'
+                        />
+                        <button onClick={handleUpdateForm}>Update</button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

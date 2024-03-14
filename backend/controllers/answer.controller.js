@@ -33,6 +33,7 @@ exports.submitAnswers = async (req, res) => {
                     data.push(elem);
                 }
             }
+            console.log(data);
             await Answers.bulkCreate(data).then((data) => {
                 res.send(data);
             });
