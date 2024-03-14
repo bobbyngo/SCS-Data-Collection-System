@@ -6,13 +6,13 @@ function NavBar() {
         <nav>
             <ul>
                 <li>
-                    <Link to='/'>Login</Link>
+                    <Link to='/registration'>Registration</Link>
                 </li>
                 <li>
-                    <Link to='/Registration'>Registration</Link>
+                    <Link to='/form-list'>Forms</Link>
                 </li>
                 <li>
-                    <Link to='/forms'>Forms</Link>
+                    <Link to='/signout'>Signout</Link>
                 </li>
             </ul>
         </nav>

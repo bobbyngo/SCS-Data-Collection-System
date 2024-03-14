@@ -10,11 +10,13 @@
     padding: 0.75rem;
     vertical-align: top;
     border-top: 1px solid #dee2e6;
+    text-align: center; /* Center the text/content */
 }
 
 .table thead th {
     vertical-align: bottom;
     border-bottom: 2px solid #dee2e6;
+    text-align: center; /* Center the text/content */
 }
 
 .table tbody + tbody {
@@ -42,6 +44,7 @@
     color: #fff;
     background-color: #005689;
     border-color: #005689;
+    cursor: pointer;
 }
 
 .btn-primary {
@@ -52,6 +55,7 @@
 .btn-primary:hover {
     background-color: #004168;
     border-color: #004168;
+    cursor: pointer;
 }
 
 .btn-warning {
@@ -62,6 +66,7 @@
 .btn-warning:hover {
     background-color: #d66800;
     border-color: #d66800;
+    cursor: pointer;
 }
 
 .btn-danger {

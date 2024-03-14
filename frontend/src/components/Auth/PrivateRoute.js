@@ -1,9 +1,15 @@
-import React from 'react';
-import { Navigate } from 'react-router-dom';
+import { Route, Navigate } from 'react-router-dom';
+import NavBar from '../Navbar';
 
-export default function PrivateRoute({ children }) {
-    //const { currentUser } = useAuth();
-
-    //return currentUser ? children : <Navigate to='/signin' />;
-    return <div></div>;
+function PrivateRoute({ isLoggedIn, children }) {
+    return isLoggedIn ? (
+        <>
+            <NavBar />
+            {children}
+        </>
+    ) : (
+        <Navigate to='/signin' />
+    );
 }
+
+export default PrivateRoute;

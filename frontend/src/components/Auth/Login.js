@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { login } from '../../services/api';
 import '../styles/Auth.css';
 
-function Login() {
+function Login({ setLoggedIn }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
@@ -14,9 +14,10 @@ function Login() {
         try {
             const user = await login(username, password);
             localStorage.setItem('user', JSON.stringify(user)); // Store user information in local storage
-            //console.log(`log in ${localStorage.getItem('user')}`);
+            console.log(`log in ${localStorage.getItem('user')}`);
             //const data = localStorage.getItem('user');
             //console.log(JSON.parse(data).jwtToken);
+            setLoggedIn(true);
             navigate('/form-list');
         } catch (error) {
             setError(error.message);

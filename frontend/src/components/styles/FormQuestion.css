@@ -114,3 +114,47 @@ input[type='checkbox'] {
     right: 5px;
     cursor: pointer;
 }
+
+.create-button,
+.update-button,
+.delete-button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px 5px;
+    background-color: #004168; /* Blue color for buttons */
+    color: #fff;
+    border: 2px solid #0073e6; /* Blue border */
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    text-decoration: none; /* Remove underline */
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s; /* Smooth transition */
+}
+
+.submit-button:hover,
+.create-button:hover,
+.update-button:hover,
+.delete-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    border-color: #0056b3; /* Darker blue border on hover */
+}
+
+.update-button {
+    background-color: #ff7f00;
+    border-color: #ff7f00;
+}
+
+.update-button:hover {
+    background-color: rgb(222, 153, 3);
+    border-color: rgb(222, 153, 3);
+}
+
+.delete-button {
+    background-color: #dc3545; /* Red color for delete button */
+    border-color: #dc3545; /* Red border */
+}
+
+.delete-button:hover {
+    background-color: #c82333; /* Darker red on hover */
+    border-color: #c82333; /* Darker red border on hover */
+}

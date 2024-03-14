@@ -28,10 +28,18 @@ const FormDetail = (props) => {
         getQuestions();
     }, [formId]); // Fetch questions whenever formId changes
 
+    const onQuestionsChange = async () => {
+        await getQuestions(); // Fetch updated questions
+    };
+
     return (
         <div className='mt-5'>
             <h2 className='survey-header'>{formName}</h2>
-            <FormQuestion questions={questions} />
+            <FormQuestion
+                form_id={formId}
+                questions={questions}
+                onQuestionsChange={onQuestionsChange}
+            />
         </div>
     );
 };

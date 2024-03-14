@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/FormQuestion.css';
 import axios from 'axios';
-const FormQuestion = ({ questions }) => {
+const FormQuestion = ({ questions, form_id, onQuestionsChange }) => {
     const navigate = useNavigate();
     const [answers, setAnswers] = useState([]);
     const [submissionSuccess, setSubmissionSuccess] = useState(false);
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [showUpdateModal, setShowUpdateModal] = useState(false);
     const [newQuestionData, setNewQuestionData] = useState({
-        form_id: '', // Sample form_id, you may need to adjust this
+        form_id: form_id, // Sample form_id, you may need to adjust this
         question_type_id: 0,
         is_required: true,
         is_mandatoryhc: true,
@@ -195,42 +195,75 @@ const FormQuestion = ({ questions }) => {
     };
 
     const handleCreateQuestion = async () => {
-        // Logic to create a new question
-        // Send a request to the backend API to create a new question
-        // Update the UI with the new question
-        setShowCreateModal(false);
-        // Sample form_id, you may need to adjust this
-        setNewQuestionData({
-            form_id: '',
-            question_type_id: 0,
-            is_required: true,
-            is_mandatoryhc: true,
-            question_text: '',
-            question_option: [],
-        });
+        if (newQuestionData.question_text.trim() === '') {
+            alert('Please enter a question text');
+            return;
+        }
+        try {
+            const response = await axios.post(
+                `http://localhost:4000/api/form/${form_id}/question/add`,
+                newQuestionData,
+                {
+                    withCredentials: true,
+                }
+            );
+            setShowCreateModal(false);
+            setNewQuestionData({
+                form_id: form_id,
+                question_type_id: 0,
+                is_required: true,
+                is_mandatoryhc: true,
+                question_text: '',
+                question_option: [],
+            });
+            onQuestionsChange();
+        } catch (error) {
+            console.error('Error creating question:', error);
+        }
     };
 
-    const handleUpdateQuestion = async (questionId) => {
-        setUpdatingQuestionId(questionId);
-        // Logic to update an existing question
-        // Send a request to the backend API to update the question
-        // Update the UI with the updated question
-        setShowUpdateModal(false);
-        setNewQuestionData({
-            form_id: '',
-            question_type_id: 0,
-            is_required: true,
-            is_mandatoryhc: true,
-            question_text: '',
-            question_option: [],
-        });
+    const handleUpdateQuestion = async () => {
+        if (newQuestionData.question_text.trim() === '') {
+            alert('Please enter a question text');
+            return;
+        }
+        try {
+            const response = await axios.put(
+                `http://localhost:4000/api/form/question/${updatingQuestionId}`,
+                newQuestionData,
+                {
+                    withCredentials: true,
+                }
+            );
+            // Handle success
+            setShowUpdateModal(false);
+            setNewQuestionData({
+                form_id: '',
+                question_type_id: 0,
+                is_required: true,
+                is_mandatoryhc: true,
+                question_text: '',
+                question_option: [],
+            });
+            onQuestionsChange();
+        } catch (error) {
+            console.error('Error updating question:', error);
+        }
     };
 
     const handleDeleteQuestion = async (questionId) => {
-        // Logic to delete a question
-        // Send a request to the backend API to delete the question
-        // Update the UI by removing the deleted question
-        setDeletingQuestionId(null);
+        try {
+            const response = await axios.delete(
+                `http://localhost:4000/api/form/question/${questionId}`,
+                {
+                    withCredentials: true,
+                }
+            );
+            setDeletingQuestionId(null);
+            onQuestionsChange();
+        } catch (error) {
+            console.error('Error updating question:', error);
+        }
     };
 
     const handleAddOption = () => {
@@ -256,15 +289,15 @@ const FormQuestion = ({ questions }) => {
 
     const handleUpdateModalOpen = (question) => {
         setShowUpdateModal(true);
-        setUpdatingQuestionId(question.question_id);
         setNewQuestionData({
-            form_id: question.form_id,
+            form_id: form_id,
             question_type_id: question.question_type_id,
             is_required: question.is_required,
             is_mandatoryhc: question.is_mandatoryhc,
             question_text: question.question_text,
             question_option: [...question.question_option],
         });
+        setUpdatingQuestionId(question.question_id);
     };
 
     return (
@@ -283,14 +316,15 @@ const FormQuestion = ({ questions }) => {
                                 {renderQuestionInput(question)}
                             </div>
                             <button
+                                className='update-button'
                                 onClick={() => {
-                                    handleUpdateQuestion(question.question_id);
-                                    setShowUpdateModal(true);
+                                    handleUpdateModalOpen(question);
                                 }}
                             >
                                 Update
                             </button>
                             <button
+                                className='delete-button'
                                 onClick={() =>
                                     setDeletingQuestionId(question.question_id)
                                 }
@@ -305,7 +339,10 @@ const FormQuestion = ({ questions }) => {
                         Submit
                     </button>
                 )}
-                <button onClick={() => setShowCreateModal(true)}>
+                <button
+                    className='create-button'
+                    onClick={() => setShowCreateModal(true)}
+                >
                     Create New Question
                 </button>
             </div>
@@ -407,7 +444,12 @@ const FormQuestion = ({ questions }) => {
                                 </button>
                             </div>
                         )}
-                        <button onClick={handleCreateQuestion}>Create</button>
+                        <button
+                            className='create-button'
+                            onClick={handleCreateQuestion}
+                        >
+                            Create
+                        </button>
                     </div>
                 </div>
             )}
@@ -492,7 +534,12 @@ const FormQuestion = ({ questions }) => {
                                 </button>
                             </div>
                         )}
-                        <button onClick={handleUpdateQuestion}>Update</button>
+                        <button
+                            className='update-button'
+                            onClick={handleUpdateQuestion}
+                        >
+                            Update
+                        </button>
                     </div>
                 </div>
             )}
@@ -509,6 +556,7 @@ const FormQuestion = ({ questions }) => {
                         </span>
                         <p>Are you sure you want to delete this question?</p>
                         <button
+                            className='delete-button'
                             onClick={() =>
                                 handleDeleteQuestion(deletingQuestionId)
                             }

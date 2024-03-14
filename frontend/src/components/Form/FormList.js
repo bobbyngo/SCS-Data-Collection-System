@@ -145,7 +145,12 @@ const FormList = () => {
                             onChange={(e) => setNewFormName(e.target.value)}
                             placeholder='Enter form name'
                         />
-                        <button onClick={handleCreateForm}>Create</button>
+                        <button
+                            className='create-button'
+                            onClick={handleCreateForm}
+                        >
+                            Create
+                        </button>
                     </div>
                 </div>
             )}
@@ -167,7 +172,12 @@ const FormList = () => {
                             }}
                             placeholder='Enter new form name'
                         />
-                        <button onClick={handleUpdateForm}>Update</button>
+                        <button
+                            className='update-button'
+                            onClick={handleUpdateForm}
+                        >
+                            Update
+                        </button>
                     </div>
                 </div>
             )}
