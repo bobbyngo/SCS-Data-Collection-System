@@ -22,22 +22,28 @@ nav ul li {
     float: left; /* Floats list items to the left */
 }
 
-nav ul li a {
+nav ul li a,
+nav ul li button {
     display: block; /* Changes the display to block */
     color: white; /* Text color */
     text-align: center; /* Centers text horizontally */
     padding: 14px 16px; /* Padding inside each link */
     text-decoration: none; /* Removes underline from links */
+    background: none; /* Remove default button background */
+    border: none; /* Remove default button border */
+    cursor: pointer; /* Show pointer cursor */
 }
 
 /* Change the color of links on hover */
-nav ul li a:hover {
+nav ul li a:hover,
+nav ul li button:hover {
     background-color: #ddd; /* Light grey background on hover */
     color: black; /* Text color change on hover */
 }
 
 /* Style for the active/current link */
-nav ul li a.active {
+nav ul li a.active,
+nav ul li button.active {
     background-color: #04aa6d; /* Green background for active link */
     color: white;
 }
