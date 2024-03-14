@@ -74,9 +74,9 @@ CREATE POLICY collector_submission_insert ON site_schema.submissions
 FOR INSERT TO site_data_collector
 WITH CHECK (site_id = current_setting('app.current_site_id')::INT);
 
-CREATE POLICY collector_submission_update ON site_schema.submissions
+CREATE POLICY collector_answers_update ON site_schema.answers
 FOR UPDATE TO site_data_collector
-USING (session_id = current_setting('app.current_session_id')::TEXT);
+USING (submission_id = current_setting('app.current_submission_id')::TEXT);
 
 
 --test
