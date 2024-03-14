@@ -199,7 +199,12 @@ const FormList = () => {
                             }}
                             placeholder='Enter new form name'
                         />
-                        <button onClick={handleUpdateForm}>Update</button>
+                        <button
+                            className='update-button'
+                            onClick={handleUpdateForm}
+                        >
+                            Update
+                        </button>
                     </div>
                 </div>
             )}
