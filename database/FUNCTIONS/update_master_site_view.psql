@@ -1,0 +1,28 @@
+CREATE OR REPLACE FUNCTION site_schema.update_master_site_view()
+RETURNS TRIGGER AS $$
+DECLARE
+    view_record RECORD;
+    sql_text TEXT := 'CREATE OR REPLACE VIEW site_schema.master_view AS ';
+    view_count INTEGER := 0;
+BEGIN
+    FOR view_record IN
+        SELECT table_name
+        FROM information_schema.views
+        WHERE table_schema = 'site_schema' AND table_name LIKE 'site_%_summary_metrics'
+    LOOP
+        IF view_count > 0 THEN
+            sql_text := sql_text || ' UNION ALL ';
+        END IF;
+        sql_text := sql_text || format('SELECT * FROM site_schema.%I', view_record.table_name);
+        view_count := view_count + 1;
+    END LOOP;
+
+    -- Execute the constructed SQL statement only if there are site-specific views to include
+    IF view_count > 0 THEN
+        EXECUTE sql_text;
+    ELSE
+        RAISE NOTICE 'No site-specific views found to include in master_view.';
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+

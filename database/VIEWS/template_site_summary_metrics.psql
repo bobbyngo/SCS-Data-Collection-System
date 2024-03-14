@@ -1,15 +1,12 @@
-
-CREATE MATERIALIZED VIEW site_schema.total_sites_summary_materialized AS
+-- Generic View Template for Individual Sites
+CREATE OR REPLACE VIEW site_schema.template_site_summary_metrics AS
 SELECT
     s.site_id,
     s.site_name,
-    s.city,
-    s.province,
-    s.site_type,
-    DATE_TRUNC('month', sub.created_date) AS report_month, -- Aggregate by month
+    DATE_TRUNC('week', sub.created_date) AS report_week,
+    DATE_TRUNC('month', sub.created_date) AS report_month,
+    DATE_TRUNC('day', sub.created_date) AS report_day,
     EXTRACT(YEAR FROM sub.created_date) AS report_year, -- Extract year for additional grouping
-    
-    
 			 -- Add count of submissions for form ID 3 where question_id 18 is 36
 			COUNT(DISTINCT CASE WHEN sub.form_id = 1 THEN sub.submission_id END) +
 			COUNT(DISTINCT CASE WHEN sub.form_id = 3 AND ans.question_id = 18 AND ans.question_option_id = 36 THEN sub.submission_id END) AS total_visits,
@@ -50,44 +47,25 @@ SELECT
 			-- Count of incidents where EMS was called
 			COUNT(DISTINCT CASE WHEN sub.form_id = 2 AND  ans.question_id = 12 AND ans.answer_boolean = TRUE THEN sub.submission_id END) AS ems_called,
 			COUNT(DISTINCT CASE WHEN sub.form_id = 3 THEN sub.submission_id END) AS total_referrals
-
-
 FROM
     site_schema.submissions sub
 JOIN
     site_schema.sc_sites s ON sub.site_id = s.site_id
-LEFT JOIN
+JOIN
     site_schema.answers ans ON sub.submission_id = ans.submission_id
 WHERE
-     sub.form_id IN (1, 2, 3) AND
-     sub.created_date < DATE_TRUNC('month', CURRENT_DATE) -- Only include records up to the end of the previous month
+    sub.form_id IN (1, 2, 3)
 GROUP BY
     s.site_id,
     s.site_name,
-    s.city,
-    s.province,
-    s.site_type,
+    report_week,
     report_month,
+    report_day,
     report_year
 ORDER BY
-    report_month,
     report_year,
+    report_month,
+    report_day,
     s.site_id;
-
-
-CREATE OR REPLACE VIEW site_schema.HC_total_sites_summary AS
-SELECT
-    *
-FROM
-    site_schema.total_sites_summary_materialized;
-
-
-CREATE INDEX idx_date ON site_schema.submissions(created_date);
-CREATE INDEX idx_question_id ON site_schema.answers(question_id);
-CREATE INDEX idx_site_id ON site_schema.submissions(site_id);
-CREATE INDEX idx_form_id ON site_schema.submissions(form_id);
-
-
-
 
 

@@ -18,7 +18,7 @@ CREATE TYPE log_type AS ENUM (
     'DataEdit',
     'DataDelete',
     'SystemError',
-    'FormCreation',
+    'DataCreation',
     'FormUpdate'
 );
 
