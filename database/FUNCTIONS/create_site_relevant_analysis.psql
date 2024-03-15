@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION site_schema.create_new_site_analysis_view(site_id_arg INTEGER)
+CREATE OR REPLACE FUNCTION site_schema.create_site_analysis_view(site_id_arg INTEGER)
     RETURNS void
     LANGUAGE 'plpgsql'  
 AS $BODY$
@@ -68,11 +68,10 @@ BEGIN
 		LEFT JOIN
 			referral_services_needed rs ON inc.site_id = rs.site_id
         WHERE
-			sub.site_id = %L AND
-            sub.form_id IN (1, 2, 3)
+			inc.site_id = %L 
 		ORDER BY
 			inc.site_id, inc.incident_drug_usage DESC, nr.null_count DESC, rs.referral_count DESC;
-        ', site_id, site_id); -- Use the site_id_arg for dynamic view name and filtering
+        ', site_id_arg, site_id_arg); -- Use the site_id_arg for dynamic view name and filtering
 
     -- Execute the dynamic SQL to create the view
     EXECUTE dynamic_sql;

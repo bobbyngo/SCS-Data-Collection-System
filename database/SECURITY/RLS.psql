@@ -1,24 +1,24 @@
 --RBAC AND RLS FOR SCHEMA
+--Ensure inserts Role is created
 DO $BODY$
 BEGIN
-   IF NOT EXISTS (SELECT 1 FROM roles WHERE rolename = 'Administrator') THEN
+   IF NOT EXISTS (SELECT 1 FROM roles WHERE role_name = 'Administrator') THEN
       CREATE ROLE Administrator;
    END IF;
-   IF NOT EXISTS (SELECT 1 FROM roles WHERE rolename = 'HC_Administrator') THEN
+   IF NOT EXISTS (SELECT 1 FROM roles WHERE role_name = 'HC_Administrator') THEN
       CREATE ROLE HC_Administrator;
    END IF;
-   IF NOT EXISTS (SELECT 1 FROM roles WHERE rolename = 'HC_Viewer') THEN
+   IF NOT EXISTS (SELECT 1 FROM roles WHERE role_name = 'HC_Viewer') THEN
       CREATE ROLE HC_Viewer;
    END IF;
-   IF NOT EXISTS (SELECT 1 FROM roles WHERE rolename = 'Site_Administrator') THEN
+   IF NOT EXISTS (SELECT 1 FROM roles WHERE role_name = 'Site_Administrator') THEN
       CREATE ROLE Site_Administrator;
    END IF;
-   IF NOT EXISTS (SELECT 1 FROM roles WHERE rolename = 'Site_Data_Collectors') THEN
+   IF NOT EXISTS (SELECT 1 FROM roles WHERE role_name = 'Site_Data_Collectors') THEN
       CREATE ROLE Site_Data_Collectors;
    END IF;
 END
 $BODY$;
-
 --Views
 
 GRANT SELECT ON site_schema.total_sites_summary, site_schema.HC_total_sites_summary TO hc_administrator;
@@ -71,12 +71,12 @@ USING (
 );
 
 CREATE POLICY collector_submission_insert ON site_schema.submissions
-FOR INSERT TO site_data_collector
+FOR INSERT TO Site_Data_Collectors
 WITH CHECK (site_id = current_setting('app.current_site_id')::INT);
 
 CREATE POLICY collector_answers_update ON site_schema.answers
-FOR UPDATE TO site_data_collector
-USING (submission_id = current_setting('app.current_submission_id')::TEXT);
+FOR UPDATE TO Site_Data_Collectors
+USING (submission_id = current_setting('app.current_submission_id')::INT);
 
 
 --test

@@ -1,23 +1,15 @@
 
---select site_schema.create_site_view(..);
-
-
-CREATE OR REPLACE FUNCTION site_schema.create_site_view(site_id_arg INTEGER)
-    RETURNS void
-    LANGUAGE 'plpgsql'  
-AS $BODY$
-DECLARE
-    dynamic_sql TEXT;
-BEGIN
-    -- Define the dynamic SQL for creating the site-specific view
-    dynamic_sql := format('CREATE OR REPLACE VIEW site_schema.site_%s_summary_metrics AS
-		SELECT
-			s.site_id,
-			s.site_name,
-            DATE_TRUNC(''week'', sub.created_date) AS report_week, 
-            DATE_TRUNC(''month'', sub.created_date) AS report_month,
-            DATE_TRUNC(''day'', sub.created_date) AS report_day, 
-    		EXTRACT(YEAR FROM sub.created_date) AS report_year,
+CREATE MATERIALIZED VIEW site_schema.HC_total_sites_summary_metrics_mat AS
+SELECT
+    s.site_id,
+    s.site_name,
+    s.city,
+    s.province,
+    s.site_type,
+    DATE_TRUNC('month', sub.created_date) AS report_month, -- Aggregate by month
+    EXTRACT(YEAR FROM sub.created_date) AS report_year, -- Extract year for additional grouping
+    
+    
 			 -- Add count of submissions for form ID 3 where question_id 18 is 36
 			COUNT(DISTINCT CASE WHEN sub.form_id = 1 THEN sub.submission_id END) +
 			COUNT(DISTINCT CASE WHEN sub.form_id = 3 AND ans.question_id = 18 AND ans.question_option_id = 36 THEN sub.submission_id END) AS total_visits,
@@ -58,67 +50,38 @@ BEGIN
 			-- Count of incidents where EMS was called
 			COUNT(DISTINCT CASE WHEN sub.form_id = 2 AND  ans.question_id = 12 AND ans.answer_boolean = TRUE THEN sub.submission_id END) AS ems_called,
 			COUNT(DISTINCT CASE WHEN sub.form_id = 3 THEN sub.submission_id END) AS total_referrals
-		FROM
-			site_schema.submissions sub
-		JOIN
-			site_schema.sc_sites s ON sub.site_id = s.site_id
-		JOIN
-			site_schema.answers ans ON sub.submission_id = ans.submission_id
-		WHERE
-			sub.site_id = %L AND
-            sub.form_id IN (1, 2, 3)
-		GROUP BY
-			s.site_id,
-			s.site_name,
-            report_week, report_month, report_day, sub.created_date,
-			report_year
-		ORDER BY
-    		sub.created_date DESC;',
-        site_id_arg, site_id_arg); -- Use the site_id_arg for dynamic view name and filtering
-
-    -- Execute the dynamic SQL to create the view
-    EXECUTE dynamic_sql;
-END;
-$BODY$
 
 
+FROM
+    site_schema.submissions sub
+JOIN
+    site_schema.sc_sites s ON sub.site_id = s.site_id
+LEFT JOIN
+    site_schema.answers ans ON sub.submission_id = ans.submission_id
+WHERE
+     sub.form_id IN (1, 2, 3) AND
+     sub.created_date < DATE_TRUNC('month', CURRENT_DATE) -- Only include records up to the end of the previous month
+GROUP BY
+    s.site_id,
+    s.site_name,
+    s.city,
+    s.province,
+    s.site_type,
+    report_month,
+    report_year
+ORDER BY
+    report_month,
+    report_year,
+    s.site_id;
 
---Generate random email and password for clint using role_id and site_id
-CREATE OR REPLACE FUNCTION site_schema."site_schema.generate_staff_email_passwords"(role_id integer, site_id integer DEFAULT NULL)
-RETURNS void
-LANGUAGE 'plpgsql'  
-AS $BODY$
-DECLARE
-	s_site_id integer := site_id;
-    s_role_id integer := role_id;
-    staff_record RECORD;
-    new_email TEXT;
-    new_password TEXT;
-    email_domain TEXT := '@example.com';
-    password_characters TEXT := 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    password_length INT := 5; -- length of the password
-BEGIN
-    FOR staff_record IN
-        SELECT s.site_id, s.staff_id, r.role_name
-        FROM site_schema.staffs s
-        JOIN site_schema.roles r ON s.role_id = r.role_id
-        WHERE (s.site_id = s_site_id OR s_site_id IS NULL)
-          AND s.role_id = s_role_id
-    LOOP
-        -- Generate new email incorporating the role
-        new_email := 'staff_' || staff_record.role_name || '_' || staff_record.staff_id || email_domain;
 
-        -- Generate new password
-        new_password := '';
-        FOR i IN 1..password_length LOOP
-            new_password := new_password || substr(password_characters, (random() * (length(password_characters) - 1) + 1)::INTEGER, 1);
-        END LOOP;
-        new_password := md5(new_password); -- Hash the password,
-        -- Update staff record with new email and password hash
-        UPDATE site_schema.staffs
-        SET email = new_email, password_hash = new_password
-        WHERE staff_id = staff_record.staff_id;
-    END LOOP;
-END;
-$BODY$
+
+CREATE INDEX idx_date ON site_schema.submissions(created_date);
+CREATE INDEX idx_question_id ON site_schema.answers(question_id);
+CREATE INDEX idx_site_id ON site_schema.submissions(site_id);
+CREATE INDEX idx_form_id ON site_schema.submissions(form_id);
+
+
+
+
 

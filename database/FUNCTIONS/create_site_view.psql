@@ -1,6 +1,4 @@
 --select site_schema.create_site_view(..);
-
-
 CREATE OR REPLACE FUNCTION site_schema.create_site_view(site_id_arg INTEGER)
     RETURNS void
     LANGUAGE 'plpgsql'  
