@@ -16,7 +16,6 @@ exports.createForm = async (req, res) => {
 };
 
 exports.getForms = async (req, res) => {
-    console.log(req.session.user);
     try {
         await Forms.findAll().then((data) => res.send(data));
     } catch (e) {
