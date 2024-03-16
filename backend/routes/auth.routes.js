@@ -51,9 +51,4 @@ module.exports = function (app) {
      * @endpoint http://localhost:4000/api/auth/signout
      */
     app.post('/api/auth/signout', controller.signOut);
-
-    // Test api, please ignore
-    app.post('/protected', verifyAuthToken, (req, res) => {
-        res.status(200).send('You are in!');
-    });
 };
