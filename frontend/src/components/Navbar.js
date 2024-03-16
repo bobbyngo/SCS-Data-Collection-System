@@ -21,10 +21,16 @@ function NavBar() {
         <nav>
             <ul>
                 <li>
-                    <Link to='/registration'>Registration</Link>
+                    <Link to='/'>Home</Link> 
                 </li>
                 <li>
                     <Link to='/form-list'>Forms</Link>
+                </li>
+                <li>
+                    <Link to='/registration'>Registration</Link>
+                </li>
+                <li>
+                    <Link to='/powerbi-report'>Power BI Report</Link>
                 </li>
                 <li>
                     <button onClick={handleSignOut}>Sign Out</button>
