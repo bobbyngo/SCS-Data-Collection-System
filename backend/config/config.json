@@ -1,7 +1,7 @@
 {
     "host": "localhost",
     "user": "postgres",
-    "password": "Wertle34",
+    "password": "",
     "database": "postgres-supervised-consumption",
     "port": "5432",
     "dialect": "postgres"
