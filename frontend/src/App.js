@@ -4,6 +4,7 @@ import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
 import FormList from './components/Form/FormList';
 import FormDetail from './components/Form/FormDetail';
+import Submissions from './components/Form/Submissions'; // Import the Submissions component
 import PrivateRoute from './components/Auth/PrivateRoute';
 import PowerBIEmbed from './components/PowerBI/PowerBIEmbed';
 import LandingPage from './components/LandingPage/LandingPage';
@@ -32,7 +33,7 @@ function App() {
                             <Register />
                         </PrivateRoute>
                     }
-                ></Route>
+                />
                 <Route
                     path='/form-list'
                     element={
@@ -40,7 +41,7 @@ function App() {
                             <FormList />
                         </PrivateRoute>
                     }
-                ></Route>
+                />
                 <Route
                     path='/form/:formId'
                     element={
@@ -48,7 +49,15 @@ function App() {
                             <FormDetail />
                         </PrivateRoute>
                     }
-                ></Route>
+                />
+                <Route
+                    path='/submissions/:formId'
+                    element={
+                        <PrivateRoute isLoggedIn={isLoggedIn}>
+                            <Submissions />
+                        </PrivateRoute>
+                    }
+                />
                 <Route
                     path='/powerbi-report'
                     element={
@@ -56,7 +65,7 @@ function App() {
                             <PowerBIEmbed />
                         </PrivateRoute>
                     }
-                ></Route>
+                />
             </Routes>
         </Router>
     );

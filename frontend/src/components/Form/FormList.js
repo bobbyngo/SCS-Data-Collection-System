@@ -21,7 +21,6 @@ const FormList = () => {
                     withCredentials: true,
                 }
             );
-            // Refresh the form list after creating a new form
             getForms();
             setShowCreateFormModal(false);
             setNewFormName('');
@@ -39,7 +38,6 @@ const FormList = () => {
                     withCredentials: true,
                 }
             );
-            // Refresh the form list after updating the form
             getForms();
             setShowUpdateFormModal(false);
             setNewFormName('');
@@ -119,10 +117,16 @@ const FormList = () => {
                                 </button>
                                 <button
                                     onClick={() => handleDelete(form.form_id)}
-                                    className='btn btn-danger'
+                                    className='btn btn-danger mr-2'
                                 >
                                     Delete
                                 </button>
+                                <Link
+                                    to={`/submissions/${form.form_id}`}
+                                    className='btn btn-info'
+                                >
+                                    View Submissions
+                                </Link>
                             </td>
                         </tr>
                     ))}
