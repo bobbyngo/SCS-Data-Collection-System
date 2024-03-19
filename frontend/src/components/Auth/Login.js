@@ -13,10 +13,8 @@ function Login({ setLoggedIn }) {
         e.preventDefault();
         try {
             const user = await login(username, password);
-            localStorage.setItem('user', JSON.stringify(user)); // Store user information in local storage
-            console.log(`log in ${localStorage.getItem('user')}`);
-            //const data = localStorage.getItem('user');
-            //console.log(JSON.parse(data).jwtToken);
+            // Assuming the response 'user' contains a 'role' field. Adjust as per your actual API response structure.
+            localStorage.setItem('user', JSON.stringify(user)); 
             setLoggedIn(true);
             navigate('/form-list');
         } catch (error) {
@@ -27,14 +25,11 @@ function Login({ setLoggedIn }) {
     return (
         <div>
             <div className='auth-container'>
-                <h1>Welcome to the Supervised Consumption Sites Web System</h1>{' '}
-                {/* Title */}
+                <h1>Welcome to the Supervised Consumption Sites Web System</h1>
                 <h2>Login</h2>
                 <form onSubmit={handleLogin}>
                     <div>
-                        <label htmlFor='username' className='label'>
-                            Username
-                        </label>
+                        <label htmlFor='username' className='label'>Username</label>
                         <input
                             type='text'
                             placeholder='Username'
@@ -48,9 +43,7 @@ function Login({ setLoggedIn }) {
                     </div>
 
                     <div>
-                        <label htmlFor='password' className='label'>
-                            Password
-                        </label>
+                        <label htmlFor='password' className='label'>Password</label>
                         <input
                             type='password'
                             placeholder='Password'
@@ -63,9 +56,7 @@ function Login({ setLoggedIn }) {
                         />
                     </div>
 
-                    <button type='submit' className='button'>
-                        Log In
-                    </button>
+                    <button type='submit' className='button'>Log In</button>
                 </form>
                 {error && <p>{error}</p>}
             </div>
