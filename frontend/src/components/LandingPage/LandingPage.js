@@ -13,6 +13,7 @@ const LandingPage = () => {
     <div className="landing-container">
         <h1>Welcome to the SCS Web System</h1>
         <p className="authors">by Huu Gia Bao Ngo, Mark Hamad, Stephnie Ughara</p>
+        <p className="authors">under the guidance and supervision of Dr. James R. Green and Victoria Ajila</p>
         <section className="section">
             <h2>Overview</h2>
             <p>The ‘Web Data System for Supervised Consumption Sites’ project, developed in collaboration with Health Canada, aims to create a standardized data collection system for supervised consumption sites across Canada. This initiative serves the fundamental purpose of managing critical data for policymaking and operational needs within Health Canada.</p>
