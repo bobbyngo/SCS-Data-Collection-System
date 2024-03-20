@@ -23,6 +23,7 @@ const FormQuestion = ({ questions, form_id, onQuestionsChange }) => {
         if (questions.length === 0) {
             setSubmissionSuccess(false); // Reset submission success when there are no questions
         }
+        document.title = "View/Fill Out Form";
     }, [questions]);
 
     const isAdmin = () => {

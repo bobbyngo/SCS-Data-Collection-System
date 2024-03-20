@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { register } from '../../services/api';
 import '../styles/Register.css';
@@ -77,6 +77,10 @@ function Register() {
         }
     };
 
+    useEffect(() => {
+        document.title = "Register New User"; // Sets the page title
+    }, []); 
+    
     return (
         <div className='register-container'>
             <h2>Register New User</h2>

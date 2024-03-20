@@ -99,6 +99,7 @@ const FormList = () => {
 
     useEffect(() => {
         getForms();
+        document.title = "Form List";
     }, []);
 
 
@@ -111,7 +112,7 @@ const FormList = () => {
                     className='btn btn-success mb-3'
                     onClick={() => setShowCreateFormModal(true)}
                 >
-                    Create Form
+                    Create New Form
                 </button>
             )}
             <table className='table table-striped'>
@@ -133,7 +134,7 @@ const FormList = () => {
                                     state={{ form: form.form_name }}
                                     className='btn btn-primary mr-2'
                                 >
-                                    View
+                                    View/Fill Out
                                 </Link>
                                 {/* Conditionally render the "View Submissions" button for admins */}
                                 {isAdmin() && (
@@ -152,7 +153,7 @@ const FormList = () => {
                                             }}
                                             className='btn btn-warning mr-2'
                                         >
-                                            Edit
+                                            Rename
                                         </button>
                                         <button
                                             onClick={() => handleDelete(form.form_id)}

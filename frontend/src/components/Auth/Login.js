@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../../services/api';
 import '../styles/Auth.css';
@@ -27,6 +27,10 @@ function Login({ setLoggedIn }) {
             setError(error.message);
         }
     };
+
+    useEffect(() => {
+        document.title = "Login"; // Sets the page title
+    }, []); 
 
     return (
         <div>
