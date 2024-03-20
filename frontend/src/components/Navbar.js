@@ -17,21 +17,35 @@ function NavBar() {
         }
     };
 
+    const userRole = JSON.parse(localStorage.getItem('user'))?.role_id;
+
     return (
         <nav>
             <ul>
                 <li>
                     <Link to='/'>Home</Link> 
                 </li>
-                <li>
-                    <Link to='/form-list'>Forms</Link>
-                </li>
-                <li>
-                    <Link to='/registration'>Registration</Link>
-                </li>
-                <li>
-                    <Link to='/powerbi-report'>Power BI Report</Link>
-                </li>
+
+                {userRole === 0 && (
+                    <>
+                        <li>
+                            <Link to='/form-list'>Forms</Link>
+                        </li>
+                        <li>
+                            <Link to='/registration'>Registration</Link>
+                        </li>
+                        <li>
+                            <Link to='/powerbi-report'>Power BI Report</Link>
+                        </li>
+                    </>
+                )}
+
+                {userRole !== 0 && (
+                    <li>
+                        <Link to='/form-list-user'>Forms</Link>
+                    </li>
+                )}
+
                 <li>
                     <button onClick={handleSignOut}>Sign Out</button>
                 </li>

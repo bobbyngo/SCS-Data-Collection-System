@@ -13,14 +13,24 @@ function Login({ setLoggedIn }) {
         e.preventDefault();
         try {
             const user = await login(username, password);
-            // Assuming the response 'user' contains a 'role' field. Adjust as per your actual API response structure.
-            localStorage.setItem('user', JSON.stringify(user)); 
+            localStorage.setItem('user', JSON.stringify(user));
             setLoggedIn(true);
-            navigate('/form-list');
+    
+            // Redirect based on role_id as an integer
+            if (user.role_id === 0) { // Check for admin (role_id 0)
+                console.log(user);
+                console.log('Role ID:', user.role_id);
+                navigate('/form-list');
+            } else { // Assume any other role_id is for site role
+                console.log(user);
+                console.log('Role ID:', user.role_id);
+                navigate('/form-list-user');
+            }
         } catch (error) {
             setError(error.message);
         }
     };
+    
 
     return (
         <div>
