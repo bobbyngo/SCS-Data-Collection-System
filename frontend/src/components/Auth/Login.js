@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+//import { useNavigate } from 'react-router-dom';
 import { login } from '../../services/api';
 import '../styles/Auth.css';
 
-function Login({ setLoggedIn }) {
+function Login({ setLoggedIn, setUserRole }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
-    const navigate = useNavigate();
+    //const navigate = useNavigate();
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -15,22 +15,13 @@ function Login({ setLoggedIn }) {
             const user = await login(username, password);
             localStorage.setItem('user', JSON.stringify(user));
             setLoggedIn(true);
-    
-            // Redirect based on role_id as an integer
-            if (user.role_id === 0) { // Check for admin (role_id 0)
-                console.log(user);
-                console.log('Role ID:', user.role_id);
-                navigate('/form-list');
-            } else { // Assume any other role_id is for site role
-                console.log(user);
-                console.log('Role ID:', user.role_id);
-                navigate('/form-list-user');
-            }
+            setUserRole(user.role_id); // Set the user role state here
+            
+            // Redirect is no longer needed here as it will be handled by App.js useEffect
         } catch (error) {
             setError(error.message);
         }
-    };
-    
+    };    
 
     return (
         <div>
