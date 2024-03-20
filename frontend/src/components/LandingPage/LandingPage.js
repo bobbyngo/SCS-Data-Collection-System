@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/LandingPage.css';
 
@@ -8,6 +8,10 @@ const LandingPage = () => {
   const handleLoginRedirect = () => {
     navigate('/signin');
   };
+
+  useEffect(() => {
+    document.title = "SCS Web System"; // Sets the page title
+}, []);
 
   return (
     <div className="landing-container">
