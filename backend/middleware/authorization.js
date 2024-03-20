@@ -5,31 +5,21 @@ function isSuperAdmin(req, res, next) {
     return Role[user.role_id] === 'Administrator';
 }
 
-const isAdmin = () => {
-    // Retrieve userData within the function to get the latest information
-    let userData = localStorage.getItem('user');
-
-    if (!userData) {
-        console.log("No user data found in local storage.");
-        return false;
+function isAdmin(req, res, next) {
+    const user = req.session.user;
+    const role = Role[user.role_id];
+    if (
+        isSuperAdmin(req) ||
+        role === 'HC_Administrator' ||
+        role === 'Site_Administrator'
+    ) {
+        return next();
+    } else {
+        return res.status(401).send({
+            message: 'Unauthorized to access the resources',
+        });
     }
-
-    try {
-        const user = JSON.parse(userData);
-        console.log("Parsed user data:", user);
-
-        // Check for admin role ids: 0 (Administrator)
-        const adminRoles = [0]; // Based on the user object structure provided
-        const isUserAdmin = adminRoles.includes(user.user.role_id);
-
-        console.log(`User Role ID: ${user.user.role_id}, Is Admin: ${isUserAdmin}`);
-        return isUserAdmin;
-
-    } catch (error) {
-        console.error("Error parsing user data:", error);
-        return false;
-    }
-};
+}
 
 function isSiteRole(req, res, next) {
     const user = req.session.user;
