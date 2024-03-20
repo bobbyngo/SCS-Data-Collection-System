@@ -13,10 +13,16 @@ function Login({ setLoggedIn }) {
         e.preventDefault();
         try {
             const user = await login(username, password);
-            // Assuming the response 'user' contains a 'role' field. Adjust as per your actual API response structure.
             localStorage.setItem('user', JSON.stringify(user)); 
             setLoggedIn(true);
-            navigate('/form-list');
+
+            // Check the role_id and navigate accordingly
+            const role_id = user?.user?.role_id;
+            if (role_id === 2) {
+                navigate('/powerbi-report'); // Redirect role_id 2 to Power BI Report
+            } else {
+                navigate('/form-list'); // Redirect all other roles to Forms
+            }
         } catch (error) {
             setError(error.message);
         }
