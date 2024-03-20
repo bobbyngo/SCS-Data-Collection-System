@@ -7,6 +7,7 @@ const PowerBIEmbedComponent = () => {
 
   return (
     <div className="powerbi-container">
+      <h1>Power BI Dashboard</h1>
       <iframe
         title="Power BI Report"
         src={embedUrl}
