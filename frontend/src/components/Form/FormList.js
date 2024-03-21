@@ -47,6 +47,8 @@ const FormList = () => {
                     withCredentials: true,
                 }
             );
+            // Refresh the form list after creating a new form
+
             getForms();
             setShowCreateFormModal(false);
             setNewFormName('');
@@ -64,6 +66,8 @@ const FormList = () => {
                     withCredentials: true,
                 }
             );
+            // Refresh the form list after updating the form
+
             getForms();
             setShowUpdateFormModal(false);
             setNewFormName('');
