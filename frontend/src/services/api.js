@@ -21,8 +21,8 @@ const register = async (username, password, email, siteId, roleId) => {
             username,
             password,
             email,
-            siteId,
-            roleId,
+            site_id: siteId,
+            role_id: roleId,
         },
         {
             withCredentials: true,
