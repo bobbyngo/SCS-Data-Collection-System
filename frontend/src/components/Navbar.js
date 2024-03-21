@@ -65,7 +65,7 @@ function NavBar() {
 
                 {/* Sign Out is visible to all users */}
                 <li>
-                    <button onClick={handleSignOut}>Sign Out</button>
+                    <button className="signout-button" onClick={handleSignOut}>Sign Out</button>
                 </li>
             </ul>
         </nav>
