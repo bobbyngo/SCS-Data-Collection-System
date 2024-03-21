@@ -12,6 +12,32 @@ const FormList = () => {
     let userData = localStorage.getItem('user');
     let token = JSON.parse(userData).jwtToken;
 
+    const isAdmin = () => {
+        // Retrieve userData within the function to get the latest information
+        let userData = localStorage.getItem('user');
+    
+        if (!userData) {
+            console.log("No user data found in local storage.");
+            return false;
+        }
+    
+        try {
+            const user = JSON.parse(userData);
+            console.log("Parsed user data:", user);
+    
+            // Check for admin role ids: 0 (Administrator)
+            const adminRoles = [0, 1, 3]; // Based on the user object structure provided
+            const isUserAdmin = adminRoles.includes(user.user.role_id);
+    
+            console.log(`User Role ID: ${user.user.role_id}, Is Admin: ${isUserAdmin}`);
+            return isUserAdmin;
+    
+        } catch (error) {
+            console.error("Error parsing user data:", error);
+            return false;
+        }
+    };
+
     const handleCreateForm = async () => {
         try {
             await axios.post(
@@ -22,6 +48,7 @@ const FormList = () => {
                 }
             );
             // Refresh the form list after creating a new form
+
             getForms();
             setShowCreateFormModal(false);
             setNewFormName('');
@@ -40,6 +67,7 @@ const FormList = () => {
                 }
             );
             // Refresh the form list after updating the form
+
             getForms();
             setShowUpdateFormModal(false);
             setNewFormName('');
@@ -75,17 +103,22 @@ const FormList = () => {
 
     useEffect(() => {
         getForms();
+        document.title = "Form List";
     }, []);
+
 
     return (
         <div className='mt-5'>
             <h2>Form List</h2>
-            <button
-                className='btn btn-success mb-3'
-                onClick={() => setShowCreateFormModal(true)}
-            >
-                Create Form
-            </button>
+            {/* Conditionally render the Create Form button for admins */}
+            {isAdmin() && (
+                <button
+                    className='btn btn-success mb-3'
+                    onClick={() => setShowCreateFormModal(true)}
+                >
+                    Create New Form
+                </button>
+            )}
             <table className='table table-striped'>
                 <thead>
                     <tr>
@@ -105,24 +138,35 @@ const FormList = () => {
                                     state={{ form: form.form_name }}
                                     className='btn btn-primary mr-2'
                                 >
-                                    View
+                                    View/Fill Out
                                 </Link>
-                                <button
-                                    onClick={() => {
-                                        setNewFormName(form.form_name);
-                                        setSelectedFormId(form.form_id);
-                                        setShowUpdateFormModal(true);
-                                    }}
-                                    className='btn btn-warning mr-2'
-                                >
-                                    Edit
-                                </button>
-                                <button
-                                    onClick={() => handleDelete(form.form_id)}
-                                    className='btn btn-danger'
-                                >
-                                    Delete
-                                </button>
+                                {/* Conditionally render the "View Submissions" button for admins */}
+                                {isAdmin() && (
+                                    <>
+                                        <Link
+                                            to={`/submissions/${form.form_id}`}
+                                            className='btn btn-info mr-2'
+                                        >
+                                            View Submissions
+                                        </Link>
+                                        <button
+                                            onClick={() => {
+                                                setNewFormName(form.form_name);
+                                                setSelectedFormId(form.form_id);
+                                                setShowUpdateFormModal(true);
+                                            }}
+                                            className='btn btn-warning mr-2'
+                                        >
+                                            Rename
+                                        </button>
+                                        <button
+                                            onClick={() => handleDelete(form.form_id)}
+                                            className='btn btn-danger'
+                                        >
+                                            Delete
+                                        </button>
+                                    </>
+                                )}
                             </td>
                         </tr>
                     ))}
@@ -150,6 +194,32 @@ const FormList = () => {
                             onClick={handleCreateForm}
                         >
                             Create
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {showUpdateFormModal && (
+                <div className='modal'>
+                    <div className='modal-content'>
+                        <span
+                            className='close'
+                            onClick={() => setShowUpdateFormModal(false)}
+                        >
+                            &times;
+                        </span>
+                        <h2>Update Form</h2>
+                        <input
+                            type='text'
+                            value={newFormName}
+                            onChange={(e) => setNewFormName(e.target.value)}
+                            placeholder='Enter new form name'
+                        />
+                        <button
+                            className='update-button'
+                            onClick={handleUpdateForm}
+                        >
+                            Update
                         </button>
                     </div>
                 </div>
@@ -186,3 +256,4 @@ const FormList = () => {
 };
 
 export default FormList;
+

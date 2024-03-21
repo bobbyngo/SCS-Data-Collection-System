@@ -1,17 +1,15 @@
 .auth-container {
-    max-width: 600px; /* Increased width */
+    max-width: 600px;
     margin: auto;
     padding: 20px;
     background: #fff;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-
     margin-top: 100px;
 }
 
-/* Assuming you want the sans-serif font applied to everything inside auth-container */
 .auth-container {
-    font-family: 'Arial', sans-serif; /* Example of a sans-serif font */
+    font-family: 'Arial', sans-serif; 
 }
 
 .auth-form {
@@ -32,7 +30,7 @@
 
 .button {
     padding: 10px 20px;
-    background-color: #003366; /* Darker blue */
+    background-color: #003366; 
     color: #fff;
     border: none;
     border-radius: 4px;
@@ -42,7 +40,7 @@
 }
 
 .button:hover {
-    background-color: #002244; /* Even darker blue on hover */
+    background-color: #002244; 
 }
 
 .label {
@@ -55,6 +53,7 @@
 h2,
 h1 {
     margin-top: 10px;
+    margin-bottom: 15px;
 }
 
 h2 {

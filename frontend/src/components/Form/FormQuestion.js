@@ -23,8 +23,28 @@ const FormQuestion = ({ questions, form_id, onQuestionsChange }) => {
         if (questions.length === 0) {
             setSubmissionSuccess(false); // Reset submission success when there are no questions
         }
+        document.title = "View/Fill Out Form";
     }, [questions]);
 
+    const isAdmin = () => {
+        let userData = localStorage.getItem('user');
+    
+        if (!userData) {
+            return false;
+        }
+    
+        try {
+            const user = JSON.parse(userData);
+    
+            const adminRoles = [0, 1, 3];
+            return adminRoles.includes(user.user.role_id);
+    
+        } catch (error) {
+            console.error("Error parsing user data:", error);
+            return false;
+        }
+    };
+    
     const renderQuestionInput = (question) => {
         switch (question.question_type_id) {
             case 0:
@@ -315,22 +335,22 @@ const FormQuestion = ({ questions, form_id, onQuestionsChange }) => {
                             <div className='question-input'>
                                 {renderQuestionInput(question)}
                             </div>
-                            <button
-                                className='update-button'
-                                onClick={() => {
-                                    handleUpdateModalOpen(question);
-                                }}
-                            >
-                                Update
-                            </button>
-                            <button
-                                className='delete-button'
-                                onClick={() =>
-                                    setDeletingQuestionId(question.question_id)
-                                }
-                            >
-                                Delete
-                            </button>
+                            {isAdmin() && (
+                                <>
+                                    <button
+                                        className='update-button'
+                                        onClick={() => handleUpdateModalOpen(question)}
+                                    >
+                                        Update
+                                    </button>
+                                    <button
+                                        className='delete-button'
+                                        onClick={() => setDeletingQuestionId(question.question_id)}
+                                    >
+                                        Delete
+                                    </button>
+                                </>
+                            )}
                         </div>
                     </div>
                 ))}
@@ -339,12 +359,14 @@ const FormQuestion = ({ questions, form_id, onQuestionsChange }) => {
                         Submit
                     </button>
                 )}
-                <button
-                    className='create-button'
-                    onClick={() => setShowCreateModal(true)}
-                >
-                    Create New Question
-                </button>
+                {isAdmin() && (
+                    <button
+                        className='create-button'
+                        onClick={() => setShowCreateModal(true)}
+                    >
+                        Create New Question
+                    </button>
+                )}
             </div>
             {/* Pop-up window for successful submission */}
             {submissionSuccess && (

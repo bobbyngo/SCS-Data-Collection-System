@@ -1,10 +1,14 @@
-import Login from './components/Auth/Login';
-import Register from './components/Auth/Register';
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Login from './components/Auth/Login';
+import Register from './components/Auth/Register';
 import FormList from './components/Form/FormList';
 import FormDetail from './components/Form/FormDetail';
+import Submissions from './components/Form/Submissions'; // Import the Submissions component
 import PrivateRoute from './components/Auth/PrivateRoute';
+import PowerBIEmbed from './components/PowerBI/PowerBIEmbed';
+import LandingPage from './components/LandingPage/LandingPage';
+import PowerBISite from './components/PowerBI/PowerBISite';
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -18,6 +22,7 @@ function App() {
     return (
         <Router>
             <Routes>
+                <Route path="/" element={<LandingPage />} />
                 <Route
                     path='/signin'
                     element={<Login setLoggedIn={setIsLoggedIn} />}
@@ -29,7 +34,7 @@ function App() {
                             <Register />
                         </PrivateRoute>
                     }
-                ></Route>
+                />
                 <Route
                     path='/form-list'
                     element={
@@ -37,7 +42,7 @@ function App() {
                             <FormList />
                         </PrivateRoute>
                     }
-                ></Route>
+                />
                 <Route
                     path='/form/:formId'
                     element={
@@ -45,7 +50,31 @@ function App() {
                             <FormDetail />
                         </PrivateRoute>
                     }
-                ></Route>
+                />
+                <Route
+                    path='/submissions/:formId'
+                    element={
+                        <PrivateRoute isLoggedIn={isLoggedIn}>
+                            <Submissions />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    path='/powerbi-report'
+                    element={
+                        <PrivateRoute isLoggedIn={isLoggedIn}>
+                            <PowerBIEmbed />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    path='/powerbi-report-site'
+                    element={
+                        <PrivateRoute isLoggedIn={isLoggedIn}>
+                            <PowerBISite />
+                        </PrivateRoute>
+                    }
+                />
             </Routes>
         </Router>
     );

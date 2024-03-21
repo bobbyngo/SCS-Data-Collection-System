@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../../services/api';
 import '../styles/Auth.css';
@@ -13,28 +13,33 @@ function Login({ setLoggedIn }) {
         e.preventDefault();
         try {
             const user = await login(username, password);
-            localStorage.setItem('user', JSON.stringify(user)); // Store user information in local storage
-            console.log(`log in ${localStorage.getItem('user')}`);
-            //const data = localStorage.getItem('user');
-            //console.log(JSON.parse(data).jwtToken);
+            localStorage.setItem('user', JSON.stringify(user)); 
             setLoggedIn(true);
-            navigate('/form-list');
+
+            // Check the role_id and navigate accordingly
+            const role_id = user?.user?.role_id;
+            if (role_id === 2) {
+                navigate('/powerbi-report'); // Redirect role_id 2 to Power BI Report
+            } else {
+                navigate('/form-list'); // Redirect all other roles to Forms
+            }
         } catch (error) {
             setError(error.message);
         }
     };
 
+    useEffect(() => {
+        document.title = "Login"; // Sets the page title
+    }, []); 
+
     return (
         <div>
             <div className='auth-container'>
-                <h1>Welcome to the Supervised Consumption Sites Web System</h1>{' '}
-                {/* Title */}
+                <h1>Welcome to the Supervised Consumption Sites Web System</h1>
                 <h2>Login</h2>
                 <form onSubmit={handleLogin}>
                     <div>
-                        <label htmlFor='username' className='label'>
-                            Username
-                        </label>
+                        <label htmlFor='username' className='label'>Username</label>
                         <input
                             type='text'
                             placeholder='Username'
@@ -48,9 +53,7 @@ function Login({ setLoggedIn }) {
                     </div>
 
                     <div>
-                        <label htmlFor='password' className='label'>
-                            Password
-                        </label>
+                        <label htmlFor='password' className='label'>Password</label>
                         <input
                             type='password'
                             placeholder='Password'
@@ -63,9 +66,7 @@ function Login({ setLoggedIn }) {
                         />
                     </div>
 
-                    <button type='submit' className='button'>
-                        Log In
-                    </button>
+                    <button type='submit' className='button'>Log In</button>
                 </form>
                 {error && <p>{error}</p>}
             </div>
