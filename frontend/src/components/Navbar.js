@@ -63,6 +63,13 @@ function NavBar() {
                     </li>
                 )}
 
+                {/* Additional PowerBI link is visible to role_id 3 */}
+                {role_id === 3 && (
+                    <li>
+                        <Link to='/powerbi-report-site'>PowerBI</Link>
+                    </li>
+                )}
+
                 {/* Sign Out is visible to all users */}
                 <li>
                     <button className="signout-button" onClick={handleSignOut}>Sign Out</button>
