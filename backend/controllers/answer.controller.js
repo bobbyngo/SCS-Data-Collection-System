@@ -11,7 +11,7 @@ exports.submitAnswers = async (req, res) => {
             let data = [];
             for (let i in answers) {
                 options = answers[i]['question_option_id'];
-                if (options) {
+                if (options && Array.isArray(options)) {
                     for (let j in options) {
                         elem = {
                             form_id: form.form_id,
