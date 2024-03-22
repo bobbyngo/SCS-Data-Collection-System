@@ -4,8 +4,8 @@ const Forms = db.forms;
 exports.createForm = async (req, res) => {
     try {
         await Forms.create({
-            site_id: req.body.site_id,
-            user_id: req.session.user_id,
+            site_id: req.session.user.site_id,
+            user_id: req.session.user.staff_id,
             form_name: req.body.form_name,
         }).then((data) => {
             res.send(data);
