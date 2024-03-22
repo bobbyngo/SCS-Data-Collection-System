@@ -52,21 +52,7 @@ function NavBar() {
                 {/* Registration link is visible to role_id 0 */}
                 {role_id === 0 && (
                     <li>
-                        <Link to='/registration'>Registration</Link>
-                    </li>
-                )}
-
-                {/* Power BI Report link is visible to role_id 0, 1, 2, 3 */}
-                {(role_id === 0 || role_id === 1 || role_id === 2 || role_id === 3) && (
-                    <li>
-                        <Link to='/powerbi-report'>Power BI Report</Link>
-                    </li>
-                )}
-
-                {/* Additional PowerBI link is visible to role_id 3 */}
-                {role_id === 3 && (
-                    <li>
-                        <Link to='/powerbi-report-site'>PowerBI</Link>
+                        <Link to='/registration'>Register New User</Link>
                     </li>
                 )}
 

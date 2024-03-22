@@ -6,9 +6,7 @@ import FormList from './components/Form/FormList';
 import FormDetail from './components/Form/FormDetail';
 import Submissions from './components/Form/Submissions'; // Import the Submissions component
 import PrivateRoute from './components/Auth/PrivateRoute';
-import PowerBIEmbed from './components/PowerBI/PowerBIEmbed';
 import LandingPage from './components/LandingPage/LandingPage';
-import PowerBISite from './components/PowerBI/PowerBISite';
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -56,22 +54,6 @@ function App() {
                     element={
                         <PrivateRoute isLoggedIn={isLoggedIn}>
                             <Submissions />
-                        </PrivateRoute>
-                    }
-                />
-                <Route
-                    path='/powerbi-report'
-                    element={
-                        <PrivateRoute isLoggedIn={isLoggedIn}>
-                            <PowerBIEmbed />
-                        </PrivateRoute>
-                    }
-                />
-                <Route
-                    path='/powerbi-report-site'
-                    element={
-                        <PrivateRoute isLoggedIn={isLoggedIn}>
-                            <PowerBISite />
                         </PrivateRoute>
                     }
                 />
