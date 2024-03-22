@@ -76,7 +76,11 @@ exports.updateAnswer = async (req, res) => {
                 // Send email notification
                 let mailOptions = {
                     from: 'ngohuugiabao8980@gmail.com',
-                    to: ['ngohuugiabao8980@gmail.com'],
+                    to: [
+                        'markhamad613@gmail.com',
+                        'baobobbyngo@cmail.carleton.ca',
+                        'stephnieughara@cmail.carleton.ca',
+                    ],
                     subject: 'Answer Update Alert',
                     text: `User ID ${currentUserId} updated the answer with the id ${id}`,
                 };
