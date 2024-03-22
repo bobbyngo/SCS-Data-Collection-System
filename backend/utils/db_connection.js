@@ -210,32 +210,32 @@ async function populateQuestions() {
         {
             // question id is auto generated in the API
             question_id: 3,
-            determined_answer: 'Ottawa',
+            determined_answer: 'Metropolis',
         },
         {
             question_id: 3,
-            determined_answer: 'Toronto',
+            determined_answer: 'Gotham',
         },
         {
             question_id: 3,
-            determined_answer: 'Vancouver',
+            determined_answer: 'Greenfield',
         },
         {
             question_id: 3,
-            determined_answer: 'Mississauga',
+            determined_answer: 'Valleyview',
         },
         {
             question_id: 3,
-            determined_answer: 'Hamilton',
+            determined_answer: 'Sunset City',
         },
         {
             question_id: 3,
-            determined_answer: 'Quebec',
+            determined_answer: 'Rosewood',
         },
-        {
-            question_id: 3,
-            determined_answer: 'Montreal',
-        },
+        // {
+        //     question_id: 3,
+        //     determined_answer: 'Montreal',
+        // },
         {
             question_id: 4,
             determined_answer: 'Yes',
