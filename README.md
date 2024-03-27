@@ -1,10 +1,10 @@
-# Supervised Safe Consumption Data Collection
+# SCS Data Collection System
 
 ## Overview:
 A Supervised Consumption Site (SCS), also referred to as a safe injection site or supervised injection facility, is a healthcare venue designed for individuals to consume drugs, often illicit substances, under the supervision of trained personnel. Presently, data collection from drug users at these sites involves a high degree of manual input, where staff members are required to manually enter information into Excel spreadsheets or fill out paper forms by hand. Subsequently, this data is transmitted to Health Canada via email, which poses inherent risks of data loss and inconsistencies due to the unstable nature of email communication.
 
 ## Solution:
-A webtool system that can intake supervised consumption site data and securely report it to HC, accessed via the internet using a variety of devices. Data visibility determined by role-based authentication. Single line client data will be received and securely retrieved from the database by Site Users. Mean while, Health Canada users will see aggregated data through a dashboard analyzing overall trends.
+A web-based data collection and management system for supervised consumption sites in Canada that can intake supervised consumption site data and securely report it to HC, accessed via the internet using a variety of devices. Data visibility determined by role-based authentication. Single line client data will be received and securely retrieved from the database by Site Users. Mean while, Health Canada users will see aggregated data through a dashboard analyzing overall trends.
 
 ## System Architecture
 ![image](https://github.com/bobbyngo/Supervised-Consumption-Site/assets/76576373/107a2579-509b-4690-a772-e7816445b3e6)
