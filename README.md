@@ -31,3 +31,10 @@ The password for all users is ```password```</br>
 When the user update the question, the email will be sent to the recipients using Node mailer. For configurating email, follow this [tutorial](https://www.youtube.com/watch?v=-nazR-yxaSk) </br>
 Email credential: ```backend/utils/email_notification.js```. Notice you will need to create the .env file in the same directory for the EMAIL_PWD</br>
 Email recipients and sending information: [backend/controllers/answer.controller.js](https://github.com/bobbyngo/Supervised-Consumption-Site/blob/ec00b0ee0d07b59131656cf4af3ba26561ec66b3/backend/controllers/answer.controller.js#L77)</br>
+
+## Team contribution
+| Team Member       | Work Contribution                         |
+| :---:             |             :---:                         |
+| Bao Bobby Ngo     | Backend, Architecture Design, Team Lead   |
+| Stephnie Ughara   |PowerBI - Dashboard, Database              |
+| Mark Hamad        | Frontend                                  |
