@@ -10,7 +10,7 @@ A webtool system that can intake supervised consumption site data and securely r
 ![image](https://github.com/bobbyngo/Supervised-Consumption-Site/assets/76576373/107a2579-509b-4690-a772-e7816445b3e6)
 
 ## API endpoints
-All the REST APIs are available in this path ```backend/routes```
+All the REST APIs are available in this path [```backend/routes```](https://github.com/bobbyngo/Supervised-Consumption-Site/tree/main/backend/routes)
 
 ## Running the App
 Step 1: Make sure having PostgreSQL installed in the machine. Create a database called ```postgres-supervised-consumption```</br>
