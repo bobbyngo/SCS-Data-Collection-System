@@ -1,0 +1,45 @@
+DO $$
+DECLARE
+    jid integer;
+    scid integer;
+BEGIN
+-- Creating a new job
+INSERT INTO pgagent.pga_job(
+    jobjclid, jobname, jobdesc, jobhostagent, jobenabled
+) VALUES (
+    4::integer, 'Monthly Data Refresh'::text, 'This job refreshes data from the previous month on the 15th of each month'::text, ''::text, true
+) RETURNING jobid INTO jid;
+
+-- Steps
+-- Inserting a step (jobid: NULL)
+INSERT INTO pgagent.pga_jobstep (
+    jstjobid, jstname, jstenabled, jstkind,
+    jstconnstr, jstdbname, jstonerror,
+    jstcode, jstdesc
+) VALUES (
+    jid, 'Execute Data Refresh'::text, true, 's'::character(1),
+    ''::text, 'postgres-supervised-consumption'::name, 's'::character(1),
+    'REFRESH MATERIALIZED VIEW HC_total_sites_summary_metrics;'::text, ''::text
+) ;
+
+-- Schedules
+-- Inserting a schedule
+INSERT INTO pgagent.pga_schedule(
+    jscjobid, jscname, jscdesc, jscenabled,
+    jscstart,     jscminutes, jschours, jscweekdays, jscmonthdays, jscmonths
+) VALUES (
+    jid, '15th of Every Month'::text, ''::text, true,
+    '2024-04-15 00:00:00-04'::timestamp with time zone, 
+    -- Minutes
+    '{t,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f}'::bool[]::boolean[],
+    -- Hours
+    '{t,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f}'::bool[]::boolean[],
+    -- Week days
+    '{f,f,f,f,f,f,f}'::bool[]::boolean[],
+    -- Month days
+    '{f,f,f,f,f,f,f,f,f,f,f,f,f,f,t,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f,f}'::bool[]::boolean[],
+    -- Months
+    '{t,t,t,t,t,t,t,t,t,t,t,t}'::bool[]::boolean[]
+) RETURNING jscid INTO scid;
+END
+$$;
