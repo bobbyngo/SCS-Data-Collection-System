@@ -32,4 +32,16 @@ module.exports = function (app) {
         [verifyAuthToken, authMiddleware.isAdmin], 
         controller.updateUser
     );
+
+    /**
+     * Get all information
+     * @Method GET
+     * @endpoint http://localhost:4000/api/users
+        }
+     */
+    app.get(
+        '/api/users',
+        [verifyAuthToken, authMiddleware.isAdmin],
+        controller.getAllUsers
+    );
 };

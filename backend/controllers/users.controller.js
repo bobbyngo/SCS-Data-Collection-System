@@ -66,3 +66,12 @@ exports.updateUser = async (req, res, next) => {
         res.status(500).send({ message: e.message });
     }
 };
+
+exports.getAllUsers = async (req, res, next) => {
+    try {
+        let users = await User.findAll({});
+        res.status(200).send(users);
+    } catch (e) {
+        res.status(500).send({ message: e.message });
+    }
+};
